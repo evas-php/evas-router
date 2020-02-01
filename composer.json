@@ -1,0 +1,15 @@
+{
+    "name": "evas-php/evas-router",
+    "description": "Router module (Map & Auto routing, routing results)",
+    "version": "1.0",
+    "minimum-stability": "dev",
+    "type": "library",
+    "license": "CC BY 4.0",
+    "authors": [
+        {
+            "name": "Egor Vasyakin",
+            "email": "egor@evas-php.com"
+        }
+    ],
+    "require": {}
+}
