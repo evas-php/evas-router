@@ -17,7 +17,7 @@ if (!defined('EVAS_AUTOROUTER_METHOD_POSTFIX')) define('EVAS_AUTOROUTER_METHOD_P
 
 /**
  * Автороутер по классу.
- * @author Egor Vasyakin <e.vasyakin@itevas.ru>
+ * @author Egor Vasyakin <egor@evas-php.com>
  * @since 1.0
  */
 class AutoRouterByClassMethod extends BaseAutoRouter

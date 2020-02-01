@@ -24,7 +24,7 @@ if (!defined('EVAS_ROUTING_RESULT_DEFAULT_HANDLER_CLASS')) {
 
 /**
  * Базовый абстрактный класс роутера.
- * @author Egor Vasyakin <e.vasyakin@itevas.ru>
+ * @author Egor Vasyakin <egor@evas-php.com>
  * @since 1.0
  */
 abstract class BaseRouter

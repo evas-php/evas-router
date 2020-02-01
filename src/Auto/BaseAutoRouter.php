@@ -10,7 +10,7 @@ use Evas\Router\Result\Exception\RoutingResultHandleHandlerException;
 
 /**
  * Абстрактный базовый класс автороутера.
- * @author Egor Vasyakin <e.vasyakin@itevas.ru>
+ * @author Egor Vasyakin <egor@evas-php.com>
  * @since 1.0
  */
 abstract class BaseAutoRouter extends BaseRouter

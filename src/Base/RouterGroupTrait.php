@@ -13,7 +13,7 @@ use Evas\Router\Map\MapRouter;
 
 /**
  * Расширение роутера поддержкой группировки роутеров.
- * @author Egor Vasyakin <e.vasyakin@itevas.ru>
+ * @author Egor Vasyakin <egor@evas-php.com>
  * @since 1.0
  */
 trait RouterGroupTrait

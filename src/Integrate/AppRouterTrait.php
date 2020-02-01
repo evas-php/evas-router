@@ -13,7 +13,7 @@ if (!defined('EVAS_ROUTER_CLASS')) define('EVAS_ROUTER_CLASS', Router::class);
 
 /**
  * Расширение класса приложения поддержкой router.
- * @author Egor Vasyakin <e.vasyakin@itevas.ru>
+ * @author Egor Vasyakin <egor@evas-php.com>
  * @since 1.0
  */
 trait AppRouterTrait

@@ -14,7 +14,7 @@ if (!defined('EVAS_AUTOROUTER_FILE_POSTFIX')) define('EVAS_AUTOROUTER_FILE_POSTF
 
 /**
  * Автороутер по файлу.
- * @author Egor Vasyakin <e.vasyakin@itevas.ru>
+ * @author Egor Vasyakin <egor@evas-php.com>
  * @since 1.0
  */
 class AutoRouterByFile extends BaseAutoRouter
