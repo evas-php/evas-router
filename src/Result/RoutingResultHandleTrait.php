@@ -6,7 +6,7 @@ namespace Evas\Router\Result;
 
 use \Closure;
 use Evas\Base\PhpHelper;
-use Evas\Mvc\ParentControllerTrait;
+use Evas\Mvc\InitControllerTrait;
 use Evas\Router\RouterException;
 use Evas\Router\Result\Exception\RoutingResultHandleException;
 use Evas\Router\Result\Exception\RoutingResultHandleHandlerException;
@@ -27,9 +27,9 @@ if (!defined('EVAS_CONTROLLER_CLASS') && defined('EVAS_ROUTING_RESULT_CONTROLLER
 trait RoutingResultHandleTrait
 {
     /**
-     * Подключаем поддержку родительского класса контроллера.
+     * Подключаем поддержку инициализации класса контроллера.
      */
-    use ParentControllerTrait;
+    use InitControllerTrait;
     
     /**
      * @var array подготовленные обработчики
