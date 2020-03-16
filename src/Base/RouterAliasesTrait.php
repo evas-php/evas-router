@@ -15,6 +15,7 @@ trait RouterAliasesTrait
      * @var array маппинг алиасов
      */
     protected $aliases = [
+        '/' => '\/',
         ':any' => '.*',
         ':int' => '[0-9]{1,}',
     ];
@@ -73,9 +74,7 @@ trait RouterAliasesTrait
      */
     public function preparePath(string $path): string
     {
-        $path = str_replace('/', '\/', $path);
         $path = $this->applyAliases($path);
-        $path = str_replace('?', '\?', $path);
         return "/^$path$/";
     }
 }
