@@ -103,12 +103,6 @@ abstract class BaseRouter
     public function newRoutingResult($handler = null, array $args = null): BaseRoutingResult
     {
         $middlewares = $this->getMiddlewares();
-        // // если есть middlewares
-        // if (count($middlewares) > 0) {
-        //     // если это не список обработчиков, трансформируем в список
-        //     if (!PhpHelper::isNumericArray($handler)) $handler = [$handler];
-        //     $handler = array_merge($middlewares, $handler);
-        // }
         return new $this->routingResultClass($middlewares, $handler, $args);
     }
 
