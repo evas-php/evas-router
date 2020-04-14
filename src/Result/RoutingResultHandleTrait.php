@@ -6,18 +6,10 @@ namespace Evas\Router\Result;
 
 use \Closure;
 use Evas\Base\PhpHelper;
-use Evas\Mvc\InitControllerTrait;
 use Evas\Router\RouterException;
 use Evas\Router\Result\Exception\RoutingResultHandleException;
 use Evas\Router\Result\Exception\RoutingResultHandleHandlerException;
 use Evas\Router\Result\Exception\RoutingResultHandleMiddlewareException;
-
-/**
- * Константы для свойств трейта по умолчанию.
- */
-if (!defined('EVAS_CONTROLLER_CLASS') && defined('EVAS_ROUTING_RESULT_CONTROLLER_CLASS')) {
-    define('EVAS_CONTROLLER_CLASS', EVAS_ROUTING_RESULT_CONTROLLER_CLASS);
-}
 
 /**
  * Расширение результата роутинга поддержкой обработки маршрута.
@@ -26,11 +18,6 @@ if (!defined('EVAS_CONTROLLER_CLASS') && defined('EVAS_ROUTING_RESULT_CONTROLLER
  */
 trait RoutingResultHandleTrait
 {
-    /**
-     * Подключаем поддержку инициализации класса контроллера.
-     */
-    use InitControllerTrait;
-    
     /**
      * @var array подготовленные обработчики
      */

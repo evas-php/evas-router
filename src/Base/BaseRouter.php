@@ -7,6 +7,7 @@ namespace Evas\Router\Base;
 use Evas\Base\PhpHelper;
 use Evas\Http\RequestInterface;
 use Evas\Router\Base\RouterAliasesTrait;
+use Evas\Router\Base\RouterControllerTrait;
 use Evas\Router\Base\RouterGroupTrait;
 use Evas\Router\Base\RouterMiddlewaresTrait;
 use Evas\Router\Base\RouterParentTrait;
@@ -16,10 +17,16 @@ use Evas\Router\Result\RoutingResult;
 /**
  * Константы для свойств класса по умолчанию.
  */
-if (!defined('EVAS_ROUTING_RESULT_CLASS')) define('EVAS_ROUTING_RESULT_CLASS', RoutingResult::class);
+if (!defined('EVAS_ROUTING_RESULT_CLASS')) {
+    define('EVAS_ROUTING_RESULT_CLASS', RoutingResult::class);
+}
 
 if (!defined('EVAS_ROUTING_RESULT_DEFAULT_HANDLER_CLASS')) {
     define('EVAS_ROUTING_RESULT_DEFAULT_HANDLER_CLASS', null);
+}
+
+if (!defined('EVAS_CONTROLLER_CLASS') && defined('EVAS_ROUTING_RESULT_CONTROLLER_CLASS')) {
+    define('EVAS_CONTROLLER_CLASS', EVAS_ROUTING_RESULT_CONTROLLER_CLASS);
 }
 
 /**
@@ -31,12 +38,14 @@ abstract class BaseRouter
 {
     /**
      * Подключаем поддержку алиасов.
+     * Подключаем поддержку контроллера по умолчанию.
      * Подключаем поддержку группировки.
      * Подключаем поддержку middlewares.
      * Подключаем поддержку родительского роутера.
      * Подключаем поддержку маршрутов.
      */
     use RouterAliasesTrait, 
+        RouterControllerTrait,
         RouterGroupTrait,
         RouterMiddlewaresTrait,
         RouterParentTrait,
@@ -103,7 +112,7 @@ abstract class BaseRouter
     public function newRoutingResult($handler = null, array $args = null): BaseRoutingResult
     {
         $middlewares = $this->getMiddlewares();
-        return new $this->routingResultClass($middlewares, $handler, $args);
+        return new $this->routingResultClass($middlewares, $handler, $args, $this->getControllerClass());
     }
 
     /**

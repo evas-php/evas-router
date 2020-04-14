@@ -109,6 +109,7 @@ trait RouterGroupTrait
         assert($router instanceof BaseRouter);
         $this->route($method ?? 'ALL', "$path(:any)", $router); // устанавливаем ребенка обработчиком
         return $router
+            ->controllerClass($this->getControllerClass()) // копируем имя класса контроллера по умолчанию ребенку
             ->routingResultClass($this->getRoutingResultClass()) // копируем имя класса роута ребенку
             ->middlewares($this->getMiddlewares()) // копируем middlewares ребенку
             ->aliases($this->getAliases()) // копируем шаблоны ребенку

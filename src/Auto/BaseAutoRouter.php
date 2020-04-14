@@ -45,8 +45,7 @@ abstract class BaseAutoRouter extends BaseRouter
         }
         $handler = $this->generateHandler($uri);
         try {
-            $route = $this->newRoutingResult($handler, $args);
-            return $route->prepare();
+            return $this->newRoutingResult($handler, $args)->prepare();
         } catch (RoutingResultHandleHandlerException $e) {
             return $this->newRoutingResult($this->getDefault(), $args);
         }

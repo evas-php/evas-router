@@ -4,6 +4,8 @@
  */
 namespace Evas\Router\Base;
 
+use Evas\Router\Base\RouterControllerTrait;
+
 /**
  * Базовый класс результата роутинга.
  * @author Egor Vasyakin <egor@evas-php.com>
@@ -11,6 +13,11 @@ namespace Evas\Router\Base;
  */
 class BaseRoutingResult
 {
+    /**
+     * Подключаем поддержку контроллера результата роутинга.
+     */
+    use RouterControllerTrait;
+
     /**
      * @var array middlewares
      */
@@ -32,10 +39,11 @@ class BaseRoutingResult
      * @param mixed|null обработчик
      * @param array|null аргументы обработчика
      */
-    public function __construct(array $middlewares = [], $handler = null, array $args = null)
+    public function __construct(array $middlewares = [], $handler = null, array $args = null, string $controllerClass = null)
     {
         $this->middlewares = &$middlewares;
         $this->handler = &$handler;
         if (!empty($args)) $this->args = &$args;
+        if (!empty($controllerClass)) $this->controllerClass($controllerClass);
     }
 }
