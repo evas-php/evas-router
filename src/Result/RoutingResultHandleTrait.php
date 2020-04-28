@@ -5,7 +5,7 @@
 namespace Evas\Router\Result;
 
 use \Closure;
-use Evas\Base\PhpHelper;
+use Evas\Base\Helpers\PhpHelper;
 use Evas\Router\RouterException;
 use Evas\Router\Result\Exception\RoutingResultHandleException;
 use Evas\Router\Result\Exception\RoutingResultHandleHandlerException;
