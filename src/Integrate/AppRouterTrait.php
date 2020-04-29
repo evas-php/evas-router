@@ -19,23 +19,25 @@ if (!defined('EVAS_ROUTER_CLASS')) define('EVAS_ROUTER_CLASS', Router::class);
 trait AppRouterTrait
 {
     /**
-     * @var string имя класса роутера
-     */
-    protected $routerClass = EVAS_ROUTER_CLASS;
-
-    /**
-     * @var Router роутер
-     */
-    protected $router;
-
-    /**
      * Установка имени класса роутера.
      * @param string
      * @return self
      */
     public static function setRouterClass(string $routerClass)
     {
-        return static::instanceSet('routerClass', $routerClass);
+        return static::set('routerClass', $routerClass);
+    }
+
+    /**
+     * Получение имени класса роутера.
+     * @return string
+     */
+    public static function getRouterClass(): string
+    {
+        if (!static::has('routerClass')) {
+            static::set('routerClass', EVAS_ROUTER_CLASS);
+        }
+        return static::get('routerClass');
     }
 
     /**
@@ -44,9 +46,9 @@ trait AppRouterTrait
      */
     public static function setRouter(object &$router)
     {
-        $routerClass = static::instanceGet('routerClass');
+        $routerClass = static::getRouterClass();
         assert($router instanceof $routerClass);
-        static::instanceSet('router', $router);
+        static::set('router', $router);
     }
 
     /**
@@ -55,12 +57,12 @@ trait AppRouterTrait
      */
     public static function getRouter(): object
     {
-        if (!static::instanceHas('router')) {
-            $routerClass = static::instanceGet('routerClass');
+        if (!static::has('router')) {
+            $routerClass = static::getRouterClass();
             $router = new $routerClass;
-            static::instanceSet('router', $router);
+            static::set('router', $router);
         }
-        return static::instanceGet('router');
+        return static::get('router');
     }
 
     /**
