@@ -19,7 +19,7 @@ class BaseRoutingResult
     use RouterControllerTrait;
 
     /**
-     * @var array middlewares
+     * @var array|null middlewares
      */
     public $middlewares;
     

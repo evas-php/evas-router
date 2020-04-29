@@ -19,10 +19,15 @@ use Evas\Router\Result\Exception\RoutingResultHandleMiddlewareException;
 trait RoutingResultHandleTrait
 {
     /**
+     * @property array|null $middlewares
+     * @property mixed $handler
+     * @property array $args
+     */
+    
+    /**
      * @var array подготовленные обработчики
      */
     protected $preparedHandlers;
-
 
     /**
      * Подготовка обработчика в виде пути к файлу.
