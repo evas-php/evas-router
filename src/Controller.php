@@ -20,6 +20,11 @@ if (!defined('EVAS_VIEW_PATH')) define('EVAS_VIEW_PATH', 'view/');
 class Controller
 {
     /**
+     * @var string класс приложения
+     */
+    public $appClass = EVAS_APP_CLASS;
+
+    /**
      * @var string директория файлов отображения
      */
     public $viewPath = EVAS_VIEW_PATH;
@@ -31,8 +36,7 @@ class Controller
      */
     public function filename(string $filename): string
     {
-        $appClass = EVAS_APP_CLASS;
-        return $appClass::getDir() . $this->viewPath . $filename;
+        return $this->appClass::getDir() . $this->viewPath . $filename;
     }
 
     /**
@@ -44,8 +48,7 @@ class Controller
      */
     public function render(string $filename, array $args = [])
     {
-        $appClass = EVAS_APP_CLASS;
-        return $appClass::load($this->filename($filename), $args, $this);
+        return $this->appClass::load($this->filename($filename), $args, $this);
     }
 
     /**
@@ -55,7 +58,6 @@ class Controller
      */
     public function canRender(string $filename): bool
     {
-        $appClass = EVAS_APP_CLASS;
-        return $appClass::canLoad($this->filename($filename));
+        return $this->appClass::canLoad($this->filename($filename));
     }
 }
