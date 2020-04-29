@@ -12,17 +12,22 @@ use Evas\Router\Base\RouterGroupTrait;
 use Evas\Router\Base\RouterMiddlewaresTrait;
 use Evas\Router\Base\RouterParentTrait;
 use Evas\Router\Base\RouterRoutesTrait;
+use Evas\Router\RouterException;
 use Evas\Router\Result\RoutingResult;
 
 /**
  * Константы для свойств класса по умолчанию.
  */
+if (!defined('EVAS_ROUTING_REQUEST_INTERFACE')) {
+    define('EVAS_ROUTING_REQUEST_INTERFACE', RequestInterface::class);
+}
+
 if (!defined('EVAS_ROUTING_RESULT_CLASS')) {
     define('EVAS_ROUTING_RESULT_CLASS', RoutingResult::class);
 }
 
-if (!defined('EVAS_ROUTING_RESULT_DEFAULT_HANDLER_CLASS')) {
-    define('EVAS_ROUTING_RESULT_DEFAULT_HANDLER_CLASS', null);
+if (!defined('EVAS_ROUTING_RESULT_DEFAULT_HANDLER')) {
+    define('EVAS_ROUTING_RESULT_DEFAULT_HANDLER', null);
 }
 
 if (!defined('EVAS_CONTROLLER_CLASS') && defined('EVAS_ROUTING_RESULT_CONTROLLER_CLASS')) {
@@ -59,7 +64,7 @@ abstract class BaseRouter
     /**
      * @var mixed обработчик по умолчанию
      */
-    protected $default = EVAS_ROUTING_RESULT_DEFAULT_HANDLER_CLASS;
+    protected $default = EVAS_ROUTING_RESULT_DEFAULT_HANDLER;
 
 
     /**
@@ -126,11 +131,15 @@ abstract class BaseRouter
 
     /**
      * Роутинг по объекту запроса.
-     * @param RequestInterface
+     * @param object
      * @return BaseRoutingResult
      */
-    public function routingByRequest(RequestInterface $request): BaseRoutingResult
+    public function routingByRequest(object $request): BaseRoutingResult
     {
+        $interface = EVAS_ROUTING_REQUEST_INTERFACE;
+        if (!($request instanceof $interface)) {
+            throw new RouterException("routingByRequest argument is not an instance of $interface");
+        }
         return $this->routing($request->getMethod(), $request->getPath());
     }
 }
