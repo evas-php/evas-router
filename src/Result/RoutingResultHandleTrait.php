@@ -19,11 +19,11 @@ use Evas\Router\Result\Exception\RoutingResultHandleMiddlewareException;
 trait RoutingResultHandleTrait
 {
     /**
-     * @property array|null $middlewares
+     * @property array $middlewares
      * @property mixed $handler
      * @property array $args
      */
-    
+
     /**
      * @var array подготовленные обработчики
      */
