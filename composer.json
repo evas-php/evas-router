@@ -1,8 +1,8 @@
 {
     "name": "evas-php/evas-router",
     "description": "Router module (Map & Auto routing, routing results)",
+    "keywords": ["router", "routing", "map router", "auto router", "routing by files", "routing by classes", "evas-php"],
     "version": "1.0",
-    "minimum-stability": "dev",
     "type": "library",
     "license": "CC-BY-4.0",
     "authors": [
@@ -11,12 +11,8 @@
             "email": "egor@evas-php.com"
         }
     ],
-    "repositories": [
-        {"type": "vcs", "url": "https://github.com/evas-php/evas-base"},
-        {"type": "vcs", "url": "https://github.com/evas-php/evas-http"}
-    ],
     "require": {
-        "evas-php/evas-base": "dev-master",
-        "evas-php/evas-http": "dev-master"
+        "evas-php/evas-base": "*",
+        "evas-php/evas-http": "*"
     }
 }
