@@ -11,6 +11,7 @@ use Evas\Router\Auto\BaseAutoRouter;
  */
 if (!defined('EVAS_AUTOROUTER_CLASS_PREFIX')) define('EVAS_AUTOROUTER_CLASS_PREFIX', '');
 if (!defined('EVAS_AUTOROUTER_CLASS_POSTFIX')) define('EVAS_AUTOROUTER_CLASS_POSTFIX', '');
+if (!defined('EVAS_AUTOROUTER_CLASS_CUSTOM')) define('EVAS_AUTOROUTER_CLASS_CUSTOM', '');
 
 if (!defined('EVAS_AUTOROUTER_METHOD_PREFIX')) define('EVAS_AUTOROUTER_METHOD_PREFIX', '');
 if (!defined('EVAS_AUTOROUTER_METHOD_POSTFIX')) define('EVAS_AUTOROUTER_METHOD_POSTFIX', '');
@@ -31,6 +32,11 @@ class AutoRouterByClassMethod extends BaseAutoRouter
      * @var string постфикс класса
      */
     public $classPostfix = EVAS_AUTOROUTER_CLASS_POSTFIX;
+
+    /**
+     * @var string кастомный класс для метода
+     */
+    public $classCustom = EVAS_AUTOROUTER_CLASS_CUSTOM;
 
     /**
      * @var string префикс метода
@@ -65,6 +71,17 @@ class AutoRouterByClassMethod extends BaseAutoRouter
     }
 
     /**
+     * Установка/сброс кастомного класса.
+     * @param string|null
+     * @return self
+     */
+    public function classCustom(string $value = null)
+    {
+        $this->classCustom = $value;
+        return $this;
+    }
+
+    /**
      * Установка/сброс префикса метода.
      * @param string|null
      * @return self
@@ -94,13 +111,17 @@ class AutoRouterByClassMethod extends BaseAutoRouter
     public function generateHandler(string $path): array
     {
         $parts = explode('/', $path);
-        array_shift($parts);
-        if (count($parts) < 2) array_unshift($parts, 'Index');
-        foreach ($parts as &$part) {
-            if (empty($part)) $part = 'index';
-            $part = ucfirst($part);
+        if (empty($parts[0])) array_shift($parts);
+        if (empty($this->classCustom)) {
+            if (count($parts) < 2) array_unshift($parts, 'Index');
+            foreach ($parts as &$part) {
+                if (empty($part)) $part = 'index';
+                $part = ucfirst($part);
+            }
+            $class = $this->classPrefix . implode('\\', $parts) . $this->classPostfix;
+        } else {
+            $class = $this->classCustom;
         }
-        $class = $this->classPrefix . implode('\\', $parts) . $this->classPostfix;
         $method = $this->methodPrefix . lcfirst(array_pop($parts)) . $this->methodPostfix;
         return [$class => $method];
     }
