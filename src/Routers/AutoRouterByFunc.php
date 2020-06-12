@@ -2,9 +2,9 @@
 /**
  * @package evas-php/evas-router
  */
-namespace Evas\Router\Auto;
+namespace Evas\Router\Routers;
 
-use Evas\Router\Auto\BaseAutoRouter;
+use Evas\Router\Routers\BaseAutoRouter;
 use Evas\Router\RouterException;
 
 /**

@@ -2,11 +2,11 @@
 /**
  * @package evas-php/evas-router
  */
-namespace Evas\Router\Map;
+namespace Evas\Router\Routers;
 
-use Evas\Router\Base\BaseRouter;
-use Evas\Router\Base\BaseRoutingResult;
-use Evas\Router\Map\MapRouterRestTrait;
+use Evas\Router\Routers\BaseRouter;
+use Evas\Router\Result\BaseRoutingResult;
+use Evas\Router\Traits\MapRouterRestTrait;
 
 /**
  * Маппинг роутер.

@@ -2,18 +2,19 @@
 /**
  * @package evas-php/evas-router
  */
-namespace Evas\Router\Base;
+namespace Evas\Router\Routers;
 
 use Evas\Base\PhpHelper;
 use Evas\Http\RequestInterface;
-use Evas\Router\Base\RouterAliasesTrait;
-use Evas\Router\Base\RouterControllerTrait;
-use Evas\Router\Base\RouterGroupTrait;
-use Evas\Router\Base\RouterMiddlewaresTrait;
-use Evas\Router\Base\RouterParentTrait;
-use Evas\Router\Base\RouterRoutesTrait;
-use Evas\Router\RouterException;
+use Evas\Router\Result\BaseRoutingResult;
 use Evas\Router\Result\RoutingResult;
+use Evas\Router\RouterException;
+use Evas\Router\Traits\RouterAliasesTrait;
+use Evas\Router\Traits\RouterControllerTrait;
+use Evas\Router\Traits\RouterGroupTrait;
+use Evas\Router\Traits\RouterMiddlewaresTrait;
+use Evas\Router\Traits\RouterParentTrait;
+use Evas\Router\Traits\RouterRoutesTrait;
 
 /**
  * Константы для свойств класса по умолчанию.

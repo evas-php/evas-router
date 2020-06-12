@@ -4,7 +4,7 @@
  */
 namespace Evas\Router;
 
-use Evas\Router\Map\MapRouter;
+use Evas\Router\Routers\MapRouter;
 
 /**
  * Общий класс роутера.

@@ -6,7 +6,7 @@ namespace Evas\Router\Result;
 
 use \Closure;
 use Evas\Base\Helpers\PhpHelper;
-use Evas\Router\Base\BaseRoutingResult;
+use Evas\Router\Result\BaseRoutingResult;
 use Evas\Router\Result\Exception\RoutingResultHandleException;
 use Evas\Router\Result\Exception\RoutingResultHandleHandlerException;
 use Evas\Router\Result\Exception\RoutingResultHandleMiddlewareException;

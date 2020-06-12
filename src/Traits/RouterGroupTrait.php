@@ -2,14 +2,14 @@
 /**
  * @package evas-php/evas-router
  */
-namespace Evas\Router\Base;
+namespace Evas\Router\Traits;
 
-use Evas\Router\Auto\AutoRouterByClass;
-use Evas\Router\Auto\AutoRouterByClassMethod;
-use Evas\Router\Auto\AutoRouterByFile;
-use Evas\Router\Auto\AutoRouterByFunc;
-use Evas\Router\Base\BaseRouter;
-use Evas\Router\Map\MapRouter;
+use Evas\Router\Routers\AutoRouterByClass;
+use Evas\Router\Routers\AutoRouterByClassMethod;
+use Evas\Router\Routers\AutoRouterByFile;
+use Evas\Router\Routers\AutoRouterByFunc;
+use Evas\Router\Routers\BaseRouter;
+use Evas\Router\Routers\MapRouter;
 
 /**
  * Расширение роутера поддержкой группировки роутеров.
@@ -41,6 +41,7 @@ trait RouterGroupTrait
     }
 
     /**
+     * @todo AutoRouterBuilder
      * Установка автороутера.
      * @param string|null путь
      * @param string|null метод

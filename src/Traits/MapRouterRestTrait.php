@@ -2,7 +2,7 @@
 /**
  * @package evas-php/evas-route
  */
-namespace Evas\Router\Map;
+namespace Evas\Router\Traits;
 
 /**
  * Расширение маппинг роутера поддержкой REST синтаксиса.

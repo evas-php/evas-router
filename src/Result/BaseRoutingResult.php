@@ -2,9 +2,9 @@
 /**
  * @package evas-php/evas-router
  */
-namespace Evas\Router\Base;
+namespace Evas\Router\Result;
 
-use Evas\Router\Base\RouterControllerTrait;
+use Evas\Router\Traits\RouterControllerTrait;
 
 /**
  * Базовый класс результата роутинга.

@@ -2,7 +2,7 @@
 /**
  * @package evas-php/evas-router
  */
-namespace Evas\Router\Base;
+namespace Evas\Router\Traits;
 
 /**
  * Расширение роутера для работы с маппингом маршрутов.
