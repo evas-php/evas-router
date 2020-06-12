@@ -6,7 +6,7 @@ namespace Evas\Router\Map;
 
 use Evas\Router\Base\BaseRouter;
 use Evas\Router\Base\BaseRoutingResult;
-use Evas\Router\Map\RouterMapRestTrait;
+use Evas\Router\Map\MapRouterRestTrait;
 
 /**
  * Маппинг роутер.
@@ -18,7 +18,7 @@ class MapRouter extends BaseRouter
     /**
      * Подключаем поддержку rest синтаксиса.
      */
-    use RouterMapRestTrait;
+    use MapRouterRestTrait;
 
     /**
      * Установка маршрутов для метода.

@@ -9,7 +9,7 @@ namespace Evas\Router\Map;
  * @author Egor Vasyakin <egor@evas-php.com>
  * @since 1.0
  */
-trait RouterMapRestTrait
+trait MapRouterRestTrait
 {
     /**
      * Установка маршрута/маршрутов GET.
