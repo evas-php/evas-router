@@ -19,17 +19,6 @@ use Evas\Router\Routers\MapRouter;
 trait RouterGroupTrait
 {
     /**
-     * Установка вложенного такого же роутера для группы маршрутов.
-     * @param string путь
-     * @param array|null маршруты
-     * @return BaseRouter
-     */
-    public function group(string $path, string $method = null): BaseRouter
-    {
-        return $this->child(static::class, $path, $method);
-    }
-
-    /**
      * Установка вложенного маппинг-роутера для группы маршрутов.
      * @param string путь
      * @param array|null маршруты
@@ -38,18 +27,6 @@ trait RouterGroupTrait
     public function map(string $path, string $method = null): MapRouter
     {
         return $this->child(MapRouter::class, $path, $method);
-    }
-
-    /**
-     * @todo AutoRouterBuilder
-     * Установка автороутера.
-     * @param string|null путь
-     * @param string|null метод
-     * @return AutoRouter
-     */
-    public function auto(string $path = null, string $method = null): AutoRouter
-    {
-        return $this->child(AutoRouter::class, $path, $method);
     }
 
     /**
