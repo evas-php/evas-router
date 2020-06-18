@@ -7,9 +7,9 @@ namespace Evas\Router;
 use Evas\Router\Routers\MapRouter;
 
 /**
- * Общий класс роутера.
+ * Эндпоинт класс роутера.
  * @author Egor Vasyakin <egor@evas-php.com>
  * @since 1.0
  */
-class Router extends MapRouter
+final class Router extends MapRouter
 {}
