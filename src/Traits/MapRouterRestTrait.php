@@ -1,6 +1,6 @@
 <?php
 /**
- * @package evas-php/evas-route
+ * @package evas-php\evas-route
  */
 namespace Evas\Router\Traits;
 

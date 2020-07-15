@@ -1,6 +1,6 @@
 <?php
 /**
- * @package evas-php/evas-router
+ * @package evas-php\evas-router
  */
 namespace Evas\Router\Routers;
 

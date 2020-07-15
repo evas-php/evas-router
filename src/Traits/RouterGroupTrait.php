@@ -1,6 +1,6 @@
 <?php
 /**
- * @package evas-php/evas-router
+ * @package evas-php\evas-router
  */
 namespace Evas\Router\Traits;
 
@@ -52,7 +52,7 @@ trait RouterGroupTrait
     }
 
     /**
-     * Установка автороутера по файла.
+     * Установка автороутера по файлу.
      * @param string|null путь
      * @param string|null метод
      * @return AutoRouter
