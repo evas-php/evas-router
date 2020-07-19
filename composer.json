@@ -14,5 +14,5 @@
     "require": {
         "evas-php/evas-base": "*",
         "evas-php/evas-http": "*"
-    },
+    }
 }
