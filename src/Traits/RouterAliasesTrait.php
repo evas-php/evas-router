@@ -15,7 +15,6 @@ trait RouterAliasesTrait
      * @var array маппинг алиасов
      */
     protected $aliases = [
-        '/' => '\/',
         ':any' => '.*',
         ':int' => '[0-9]{1,}',
     ];
@@ -61,6 +60,7 @@ trait RouterAliasesTrait
      */
     public function applyAliases(string $val): string
     {
+        $aliases = array_merge($this->aliases, ['/' => '\/']);
         foreach ($this->aliases as $alias => $value) {
             $val = str_replace($alias, $value, $val);
         }
