@@ -46,7 +46,7 @@ class Controller
      * @throws Evas\Base\Exception\FileNotFoundException
      * @return mixed|null возвращаемый результат файла
      */
-    public function render(string $filename, array $args = [])
+    public function render(string $filename, array $args = null)
     {
         return $this->appClass::load($this->filename($filename), $args, $this);
     }
