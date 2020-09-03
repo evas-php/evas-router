@@ -128,7 +128,7 @@ abstract class BaseRouter
      * @param string метод
      * @param string путь
      * @param array аргументы uri
-     * @return BaseRoutingResult
+     * @return RoutingResultInterface
      */
     public function routing(string $method, string $uri, array $args = null): ?RoutingResultInterface
 
