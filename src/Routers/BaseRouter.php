@@ -127,6 +127,24 @@ abstract class BaseRouter
      * @return RoutingResultInterface
      */
     public function routing(string $method, string $uri, array $args = null): ?RoutingResultInterface
+    {
+        $result = $this->mapRouting($method, $uri, $args);
+        if (null === $result && method_exists($this, 'autoRouting')) {
+            $result = $this->autoRouting($uri, $args);
+        }
+        if (null === $result) {
+            if (empty($this->default)) {
+                if (null === $this->parent) {
+                    throw new RouterException('404. Not Found.');
+                } else {
+                    return null;
+                }
+            } else {
+                return $this->newRoutingResult($this->default);
+            }
+        }
+        return $result;
+    }
 
     /**
      * Роутинг по объекту запроса.
