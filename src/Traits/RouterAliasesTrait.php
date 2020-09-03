@@ -61,7 +61,7 @@ trait RouterAliasesTrait
     public function applyAliases(string $val): string
     {
         $aliases = array_merge($this->aliases, ['/' => '\/']);
-        foreach ($this->aliases as $alias => $value) {
+        foreach ($aliases as $alias => $value) {
             $val = str_replace($alias, $value, $val);
         }
         return $val;
