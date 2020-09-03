@@ -6,14 +6,15 @@ namespace Evas\Router\Routers;
 
 use Evas\Base\PhpHelper;
 use Evas\Http\RequestInterface;
-use Evas\Router\Result\BaseRoutingResult;
 use Evas\Router\Result\RoutingResult;
+use Evas\Router\Result\RoutingResultInterface;
 use Evas\Router\RouterException;
 use Evas\Router\Traits\RouterAliasesTrait;
 use Evas\Router\Traits\RouterControllerTrait;
 use Evas\Router\Traits\RouterGroupTrait;
 use Evas\Router\Traits\RouterMiddlewaresTrait;
 use Evas\Router\Traits\RouterParentTrait;
+use Evas\Router\Traits\RouterRestTrait;
 use Evas\Router\Traits\RouterRoutesTrait;
 
 /**
@@ -55,7 +56,8 @@ abstract class BaseRouter
         RouterGroupTrait,
         RouterMiddlewaresTrait,
         RouterParentTrait,
-        RouterRoutesTrait;
+        RouterRoutesTrait,
+        RouterRestTrait;
 
     /**
      * @var string имя класса результата роутинга
@@ -113,9 +115,9 @@ abstract class BaseRouter
      * Создание объекта результата роутинга.
      * @param mixed|null обработчик маршрута
      * @param array|null аргументы обработчика
-     * @return BaseRoutingResult
+     * @return RoutingResultInterface
      */
-    public function newRoutingResult($handler = null, array $args = null): BaseRoutingResult
+    public function newRoutingResult($handler = null, array $args = null): RoutingResultInterface
     {
         $middlewares = $this->getMiddlewares();
         return new $this->routingResultClass($middlewares, $handler, $args, $this->getControllerClass());
@@ -128,14 +130,14 @@ abstract class BaseRouter
      * @param array аргументы uri
      * @return BaseRoutingResult
      */
-    abstract public function routing(string $method, string $uri, array $args = []): BaseRoutingResult;
+    public function routing(string $method, string $uri, array $args = null): ?RoutingResultInterface
 
     /**
      * Роутинг по объекту запроса.
      * @param object
-     * @return BaseRoutingResult
+     * @return RoutingResultInterface
      */
-    public function routingByRequest(object $request): BaseRoutingResult
+    public function routingByRequest(object $request): ?RoutingResultInterface
     {
         $interface = EVAS_ROUTING_REQUEST_INTERFACE;
         if (!($request instanceof $interface)) {
