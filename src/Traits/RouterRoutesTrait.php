@@ -59,9 +59,7 @@ trait RouterRoutesTrait
     public function getRoutesByMethodWithAll(string $method): array
     {
         $method = strtoupper($method);
-        $routes = array_merge($this->routes['ALL'] ?? [], $this->routes[$method] ?? []);
-        $this->sortRoutes($routes);
-        return $routes;
+        return array_merge($this->routes['ALL'] ?? [], $this->routes[$method] ?? []);
     }
 
     /**
