@@ -5,8 +5,6 @@
 namespace Evas\Router\Routers;
 
 use Evas\Router\Routers\BaseRouter;
-use Evas\Router\Result\BaseRoutingResult;
-use Evas\Router\Traits\MapRouterRestTrait;
 
 /**
  * Маппинг роутер.
@@ -15,11 +13,6 @@ use Evas\Router\Traits\MapRouterRestTrait;
  */
 class MapRouter extends BaseRouter
 {
-    /**
-     * Подключаем поддержку rest синтаксиса.
-     */
-    use MapRouterRestTrait;
-
     /**
      * Установка маршрутов для метода.
      * @param string|array метод или массив методов
@@ -46,31 +39,5 @@ class MapRouter extends BaseRouter
             $this->routesByMethod($method, $subroutes);
         }
         return $this;
-    }
-
-
-    /**
-     * Маршрутизация.
-     * @param string метод
-     * @param string путь
-     * @param array аргументы для обработчика
-     * @return BaseRoutingResult
-     */
-    public function routing(string $method, string $uri, array $args = []): BaseRoutingResult
-    {
-        if (empty($uri)) $uri = '/';
-        $routes = $this->getRoutesByMethodWithAll($method);
-        foreach ($routes as $path => $handler) {
-            if (preg_match($this->preparePath($path), $uri, $matches)) {
-                array_shift($matches);
-                $args = array_merge($args, $matches);
-                if ($handler instanceof BaseRouter) {
-                    $handlerUri = array_pop($args) ?? '';
-                    return $handler->routing($method, $handlerUri, $args);
-                }
-                return $this->newRoutingResult($handler, $args);
-            }
-        }
-        return $this->newRoutingResult($this->getDefault(), $args); 
     }
 }
