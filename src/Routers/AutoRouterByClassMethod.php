@@ -112,17 +112,21 @@ class AutoRouterByClassMethod extends BaseAutoRouter
     {
         $parts = explode('/', $path);
         if (empty($parts[0])) array_shift($parts);
+        foreach ($parts as &$part) {
+            if (empty($part)) $part = 'Index';
+            $part = ucfirst($part);
+        }
         if (empty($this->classCustom)) {
-            if (count($parts) < 2) array_unshift($parts, 'Index');
-            foreach ($parts as &$part) {
-                if (empty($part)) $part = 'index';
-                $part = ucfirst($part);
-            }
-            $class = $this->classPrefix . implode('\\', $parts) . $this->classPostfix;
+            $method = array_pop($parts);
+            $class = implode('\\', $parts);
+            if (empty($class)) $class = 'Index';
+            $class = $this->classPrefix . $class . $this->classPostfix;
         } else {
+            $method = implode('', $parts);
             $class = $this->classCustom;
         }
-        $method = $this->methodPrefix . lcfirst(array_pop($parts)) . $this->methodPostfix;
+        $method = empty($method) ? 'index' : lcfirst($method);
+        $method = $this->methodPrefix . $method . $this->methodPostfix;
         return [$class => $method];
     }
 }
