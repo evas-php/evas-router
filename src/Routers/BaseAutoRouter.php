@@ -5,7 +5,7 @@
 namespace Evas\Router\Routers;
 
 use Evas\Router\Routers\BaseRouter;
-use Evas\Router\Result\BaseRoutingResult;
+use Evas\Router\Result\RoutingResultInterface;
 use Evas\Router\Result\Exception\RoutingResultHandleHandlerException;
 
 /**
@@ -24,12 +24,12 @@ abstract class BaseAutoRouter extends BaseRouter
 
     /**
      * Автороутинг.
-     * @param string метод
      * @param string путь
      * @param array аргументы для обработчика
-     * @return BaseRoutingResult
+     * @return RoutingResultInterface
      */
     public function routing(string $method, string $uri, array $args = []): BaseRoutingResult
+    public function autoRouting(string $uri, array $args = []): ?RoutingResultInterface
     {
         if (empty($uri)) $uri = '/';
         $routes = $this->getRoutesByMethodWithAll($method);
