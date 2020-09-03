@@ -25,10 +25,10 @@ abstract class BaseAutoRouter extends BaseRouter
     /**
      * Автороутинг.
      * @param string путь
-     * @param array аргументы для обработчика
+     * @param array|null аргументы для обработчика
      * @return RoutingResultInterface
      */
-    public function autoRouting(string $uri, array $args = []): ?RoutingResultInterface
+    public function autoRouting(string $uri, array $args = null): ?RoutingResultInterface
     {
         $handler = $this->generateHandler($uri);
         try {
