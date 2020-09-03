@@ -138,10 +138,12 @@ class RoutingResult implements RoutingResultInterface
     public function prepare()
     {
         $this->preparedHandlers = [];
-        try {
-            $this->prepareList($this->middlewares);
-        } catch (RoutingResultHandleException $e) {
-            throw new RoutingResultHandleMiddlewareException($e->getMessage(), $e->getCode());
+        if (!empty($this->middlewares)) {
+            try {
+                $this->prepareList($this->middlewares);
+            } catch (RoutingResultHandleException $e) {
+                throw new RoutingResultHandleMiddlewareException($e->getMessage(), $e->getCode());
+            }
         }
         try {
             if (PhpHelper::isNumericArray($this->handler)) $this->prepareList($this->handler);
