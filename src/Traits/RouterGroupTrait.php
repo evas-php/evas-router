@@ -19,78 +19,72 @@ use Evas\Router\Routers\MapRouter;
 trait RouterGroupTrait
 {
     /**
-     * Установка вложенного маппинг-роутера для группы маршрутов.
+     * Создание вложенного мапроутера.
      * @param string путь
-     * @param array|null маршруты
-     * @return MapRouter
+     * @param callable функция описания роутера
+     * @return self
      */
-    public function map(string $path, string $method = null): MapRouter
+    public function map(string $path, callable $callback): BaseRouter
     {
-        return $this->child(MapRouter::class, $path, $method);
+        return $this->bindChild(MapRouter::class, $path, $callback);
     }
 
     /**
-     * Установка автороутера по классу.
-     * @param string|null путь
-     * @param string|null метод
-     * @return AutoRouter
+     * Создание вложенного автороутера по файлу.
+     * @param string путь
+     * @param callable функция описания роутера
+     * @return self
      */
-    public function autoByClass(string $path = null, string $method = null): AutoRouterByClass
+    public function autoByFile(string $path, callable $callback): BaseRouter
     {
-        return $this->child(AutoRouterByClass::class, $path, $method);
+        return $this->bindChild(AutoRouterByFile::class, $path, $callback);
     }
 
     /**
-     * Установка автороутера по методу класса.
-     * @param string|null путь
-     * @param string|null метод
-     * @return AutoRouter
+     * Создание вложенного автороутера по кастомной функции.
+     * @param string путь
+     * @param callable функция описания роутера
+     * @return self
      */
-    public function autoByClassMethod(string $path = null, string $method = null): AutoRouterByClassMethod
+    public function autoByFunc(string $path, callable $callback): BaseRouter
     {
-        return $this->child(AutoRouterByClassMethod::class, $path, $method);
+        return $this->bindChild(AutoRouterByFunc::class, $path, $callback);
     }
 
     /**
-     * Установка автороутера по файлу.
-     * @param string|null путь
-     * @param string|null метод
-     * @return AutoRouter
+     * Создание вложенного автороутера по классу.
+     * @param string путь
+     * @param callable функция описания роутера
+     * @return self
      */
-    public function autoByFile(string $path = null, string $method = null): AutoRouterByFile
+    public function autoByClass(string $path, callable $callback): BaseRouter
     {
-        return $this->child(AutoRouterByFile::class, $path, $method);
+        return $this->bindChild(AutoRouterByClass::class, $path, $callback);
     }
 
     /**
-     * Установка автороутера по функции.
-     * @param callable обработчик
-     * @param string|null путь
-     * @param string|null метод
-     * @return AutoRouter
+     * Создание вложенного автороутера по методу класса.
+     * @param string путь
+     * @param callable функция описания роутера
+     * @return self
      */
-    public function autoBuFunc(callable $func, string $path = null, string $method = null): AutoRouterByFunc
+    public function autoByMethod(string $path, callable $callback): BaseRouter
     {
-        return $this->child(AutoRouterByFunc::class, $path, $method)->routingFunc($func);
+        return $this->bindChild(AutoRouterByClassMethod::class, $path, $callback);
     }
 
     /**
-     * Установка дочернего роутера.
-     * @param string имя класса дочернего ротура
-     * @param string|null путь
-     * @param string|null метод
-     * @return BaseRouter дочерний роутер
+     * Создание и монтирование вложенного роутера.
+     * @param string имя класса вложенного роутера
+     * @param string путь
+     * @param callable функция описания роутера
+     * @return self
      */
-    protected function child(string $childClass, string $path = null, string $method = null): BaseRouter
+    public function bindChild(string $className, string $path, callable $callback): BaseRouter
     {
-        $router = new $childClass($this);
-        assert($router instanceof BaseRouter);
-        $this->route($method ?? 'ALL', "$path(:any)", $router); // устанавливаем ребенка обработчиком
-        return $router
-            ->controllerClass($this->getControllerClass()) // копируем имя класса контроллера по умолчанию ребенку
-            ->routingResultClass($this->getRoutingResultClass()) // копируем имя класса роута ребенку
-            ->middlewares($this->getMiddlewares()) // копируем middlewares ребенку
-            ->aliases($this->getAliases()) // копируем шаблоны ребенку
-            ->default($this->getDefault()); // копируем дефолтный обработчик ребенку
+        $router = new $className($this);
+        $callback = $callback->bindTo($router);
+        $callback();
+        return $this->all($path . '(:any)', $router);
     }
 }
