@@ -4,6 +4,9 @@
  */
 namespace Evas\Router\Traits;
 
+use Evas\Router\Result\RoutingResultInterface;
+use Evas\Router\Routers\BaseRouter;
+
 /**
  * Расширение роутера для работы с маппингом маршрутов.
  * @author Egor Vasyakin <egor@evas-php.com>
@@ -63,15 +66,27 @@ trait RouterRoutesTrait
     }
 
     /**
-     * Сортировка маршрутов.
-     * @param array маршруты для сортировки
+     * Роутинг по маршрутам.
+     * @param string метод
+     * @param string путь
+     * @param array|null параметры пути
+     * @return RoutingResultInterface|null
      */
-    public function sortRoutes(array &$routes)
+    public function mapRouting(string $method, string $uri, array $args = null): ?RoutingResultInterface
     {
-        uksort($routes, function ($cur, $next) {
-            $curLength = strlen($cur);
-            $nextLength = strlen($next);
-            return $curLength === $nextLength ? 0 : ($curLength < $nextLength ? 1 : -1);
-        });
+        if (empty($uri)) $uri = '/';
+        $routes = $this->getRoutesByMethodWithAll($method);
+        foreach ($routes as $path => $handler) {
+            if (preg_match($this->preparePath($path), $uri, $matches)) {
+                array_shift($matches);
+                $args = array_merge($args ?? [], $matches);
+                if ($handler instanceof BaseRouter) {
+                    $handlerUri = array_pop($args) ?? '';
+                    return $handler->routing($method, $handlerUri, $args);
+                }
+                return $this->newRoutingResult($handler, $args);
+            }
+        }
+        return null;
     }
 }
