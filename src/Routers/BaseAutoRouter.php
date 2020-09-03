@@ -28,26 +28,13 @@ abstract class BaseAutoRouter extends BaseRouter
      * @param array аргументы для обработчика
      * @return RoutingResultInterface
      */
-    public function routing(string $method, string $uri, array $args = []): BaseRoutingResult
     public function autoRouting(string $uri, array $args = []): ?RoutingResultInterface
     {
-        if (empty($uri)) $uri = '/';
-        $routes = $this->getRoutesByMethodWithAll($method);
-        foreach ($routes as $path => $handler) {
-            if (preg_match($this->preparePath($path), $uri, $matches)) {
-                array_shift($matches);
-                $args = array_merge($args, $matches);
-                if ($handler instanceof BaseRouter) {
-                    $handlerUri = array_pop($args) ?? '';
-                    return $handler->routing($method, $handlerUri, $args);
-                }
-            }
-        }
         $handler = $this->generateHandler($uri);
         try {
             return $this->newRoutingResult($handler, $args)->prepare();
         } catch (RoutingResultHandleHandlerException $e) {
-            return $this->newRoutingResult($this->getDefault(), $args);
+            return null;
         }
     }
 }
