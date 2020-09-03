@@ -20,20 +20,16 @@ use Evas\Router\Traits\RouterRoutesTrait;
 /**
  * Константы для свойств класса по умолчанию.
  */
-if (!defined('EVAS_ROUTING_REQUEST_INTERFACE')) {
-    define('EVAS_ROUTING_REQUEST_INTERFACE', RequestInterface::class);
+if (!defined('EVAS_ROUTER_REQUEST_INTERFACE')) {
+    define('EVAS_ROUTER_REQUEST_INTERFACE', RequestInterface::class);
 }
 
-if (!defined('EVAS_ROUTING_RESULT_CLASS')) {
-    define('EVAS_ROUTING_RESULT_CLASS', RoutingResult::class);
+if (!defined('EVAS_ROUTER_RESULT_CLASS')) {
+    define('EVAS_ROUTER_RESULT_CLASS', RoutingResult::class);
 }
 
-if (!defined('EVAS_ROUTING_RESULT_DEFAULT_HANDLER')) {
-    define('EVAS_ROUTING_RESULT_DEFAULT_HANDLER', null);
-}
-
-if (!defined('EVAS_CONTROLLER_CLASS') && defined('EVAS_ROUTING_RESULT_CONTROLLER_CLASS')) {
-    define('EVAS_CONTROLLER_CLASS', EVAS_ROUTING_RESULT_CONTROLLER_CLASS);
+if (!defined('EVAS_ROUTER_DEFAULT_HANDLER')) {
+    define('EVAS_ROUTER_DEFAULT_HANDLER', null);
 }
 
 /**
@@ -62,12 +58,12 @@ abstract class BaseRouter
     /**
      * @var string имя класса результата роутинга
      */
-    protected $routingResultClass = EVAS_ROUTING_RESULT_CLASS;
+    protected $routingResultClass = EVAS_ROUTER_RESULT_CLASS;
 
     /**
      * @var mixed обработчик по умолчанию
      */
-    protected $default = EVAS_ROUTING_RESULT_DEFAULT_HANDLER;
+    protected $default = EVAS_ROUTER_DEFAULT_HANDLER;
 
 
     /**
@@ -139,7 +135,7 @@ abstract class BaseRouter
      */
     public function routingByRequest(object $request): ?RoutingResultInterface
     {
-        $interface = EVAS_ROUTING_REQUEST_INTERFACE;
+        $interface = EVAS_ROUTER_REQUEST_INTERFACE;
         if (!($request instanceof $interface)) {
             throw new RouterException("routingByRequest argument is not an instance of $interface");
         }
