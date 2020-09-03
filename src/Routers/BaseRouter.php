@@ -116,7 +116,7 @@ abstract class BaseRouter
     public function newRoutingResult($handler = null, array $args = null): RoutingResultInterface
     {
         $middlewares = $this->getMiddlewares();
-        return new $this->routingResultClass($middlewares, $handler, $args, $this->getControllerClass());
+        return new $this->routingResultClass($handler, $args, $middlewares, $this->getControllerClass());
     }
 
     /**

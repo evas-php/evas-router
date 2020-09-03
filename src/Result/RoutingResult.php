@@ -46,15 +46,16 @@ class RoutingResult implements RoutingResultInterface
 
     /**
      * Конструктор.
-     * @param array middlewares
      * @param mixed|null обработчик
      * @param array|null аргументы обработчика
+     * @param array|null middlewares
+     * @param array|null класс контроллера
      */
-    public function __construct(array $middlewares = [], $handler = null, array $args = null, string $controllerClass = null)
+    public function __construct($handler = null, array $args = null, array $middlewares = null, string $controllerClass = null)
     {
-        $this->middlewares = &$middlewares;
         $this->handler = &$handler;
         if (!empty($args)) $this->args = &$args;
+        if (!empty($middlewares)) $this->middlewares = &$middlewares;
         if (!empty($controllerClass)) $this->controllerClass($controllerClass);
     }
 

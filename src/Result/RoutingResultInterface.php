@@ -8,6 +8,17 @@ namespace Evas\Router\Result;
  */
 interface RoutingResultInterface
 {
-    public function __construct(array $middlewares = [], $handler = null, array $args = null, string $controllerClass = null);
+    /**
+     * Конструктор.
+     * @param mixed|null обработчик
+     * @param array|null аргументы обработчика
+     * @param array|null middlewares
+     * @param array|null класс контроллера
+     */
+    public function __construct($handler = null, array $args = null, array $middlewares = null, string $controllerClass = null);
+
+    /**
+     * Вызов обработчика маршрута.
+     */
     public function handle();
 }
