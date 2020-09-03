@@ -74,7 +74,6 @@ trait RouterRoutesTrait
      */
     public function mapRouting(string $method, string $uri, array $args = null): ?RoutingResultInterface
     {
-        if (empty($uri)) $uri = '/';
         $routes = $this->getRoutesByMethodWithAll($method);
         foreach ($routes as $path => $handler) {
             if (preg_match($this->preparePath($path), $uri, $matches)) {
