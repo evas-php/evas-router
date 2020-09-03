@@ -24,35 +24,21 @@ trait RouterParentTrait
      */
     public function __construct(BaseRouter &$parent = null)
     {
-        $this->parent = &$parent;
-    }
-
-    /**
-     * Установка родительского роутера.
-     * @param BaseRouter
-     * @return self
-     */
-    public function setParent(BaseRouter &$parent)
-    {
-        $this->parent = &$parent;
-        return $this;
+        if (!empty($parent)) {
+            $this->parent = &$parent;
+            $this->aliases($parent->getAliases());
+            $this->middlewares($parent->getMiddlewares());
+            $this->controllerClass($parent->getControllerClass());
+            $this->routingResultClass($parent->getRoutingResultClass());
+        }
     }
 
     /**
      * Получение родительского роутера.
      * @return BaseRouter|null
      */
-    public function getParent(): ?BaseRouter
+    public function parent(): ?BaseRouter
     {
         return $this->parent;
-    }
-
-    /**
-     * Переход к родительскому роутеру.
-     * @return BaseRouter|null
-     */
-    public function next(): ?BaseRouter
-    {
-        return $this->getParent();
     }
 }
