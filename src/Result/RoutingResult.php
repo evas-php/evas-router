@@ -6,28 +6,57 @@ namespace Evas\Router\Result;
 
 use \Closure;
 use Evas\Base\Helpers\PhpHelper;
-use Evas\Router\Result\BaseRoutingResult;
 use Evas\Router\Result\Exception\RoutingResultHandleException;
 use Evas\Router\Result\Exception\RoutingResultHandleHandlerException;
 use Evas\Router\Result\Exception\RoutingResultHandleMiddlewareException;
+use Evas\Router\Result\RoutingResultInterface;
+use Evas\Router\Traits\RouterControllerTrait;
 
 /**
  * Класс результата роутинга с обработкой результата.
  * @author Egor Vasyakin <egor@evas-php.com>
  * @since 1.0
  */
-class RoutingResult extends BaseRoutingResult
+class RoutingResult implements RoutingResultInterface
 {
     /**
-     * @property array $middlewares
-     * @property mixed $handler
-     * @property array $args
+     * Подключаем поддержку контроллера результата роутинга.
      */
+    use RouterControllerTrait;
+
+    /**
+     * @var array middlewares
+     */
+    public $middlewares;
+    
+    /**
+     * @var mixed обработчик
+     */
+    public $handler;
+
+    /**
+     * @var array аргументы, разобранные в роутере
+     */
+    public $args = [];
 
     /**
      * @var array подготовленные обработчики
      */
     protected $preparedHandlers;
+
+    /**
+     * Конструктор.
+     * @param array middlewares
+     * @param mixed|null обработчик
+     * @param array|null аргументы обработчика
+     */
+    public function __construct(array $middlewares = [], $handler = null, array $args = null, string $controllerClass = null)
+    {
+        $this->middlewares = &$middlewares;
+        $this->handler = &$handler;
+        if (!empty($args)) $this->args = &$args;
+        if (!empty($controllerClass)) $this->controllerClass($controllerClass);
+    }
 
     /**
      * Подготовка обработчика в виде пути к файлу.
