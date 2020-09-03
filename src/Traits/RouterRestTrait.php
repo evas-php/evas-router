@@ -9,7 +9,7 @@ namespace Evas\Router\Traits;
  * @author Egor Vasyakin <egor@evas-php.com>
  * @since 1.0
  */
-trait MapRouterRestTrait
+trait RouterRestTrait
 {
     /**
      * Установка маршрута/маршрутов GET.
@@ -19,7 +19,7 @@ trait MapRouterRestTrait
      */
     public function get($path, $handler = null)
     {
-        return $this->_setRestRoute('GET', $path, $handler);
+        return $this->restRoute('GET', $path, $handler);
     }
 
     /**
@@ -30,7 +30,7 @@ trait MapRouterRestTrait
      */
     public function post($path, $handler = null)
     {
-        return $this->_setRestRoute('POST', $path, $handler);
+        return $this->restRoute('POST', $path, $handler);
     }
 
     /**
@@ -41,7 +41,7 @@ trait MapRouterRestTrait
      */
     public function put($path, $handler = null)
     {
-        return $this->_setRestRoute('PUT', $path, $handler);
+        return $this->restRoute('PUT', $path, $handler);
     }
 
     /**
@@ -52,7 +52,7 @@ trait MapRouterRestTrait
      */
     public function delete($path, $handler = null)
     {
-        return $this->_setRestRoute('DELETE', $path, $handler);
+        return $this->restRoute('DELETE', $path, $handler);
     }
 
     /**
@@ -63,7 +63,7 @@ trait MapRouterRestTrait
      */
     public function patch($path, $handler = null)
     {
-        return $this->_setRestRoute('PATCH', $path, $handler);
+        return $this->restRoute('PATCH', $path, $handler);
     }
 
     /**
@@ -74,7 +74,7 @@ trait MapRouterRestTrait
      */
     public function all($path, $handler = null)
     {
-        return $this->_setRestRoute('ALL', $path, $handler);
+        return $this->restRoute('ALL', $path, $handler);
     }
 
     /**
@@ -84,14 +84,14 @@ trait MapRouterRestTrait
      * @param mixed|null обработчик пути
      * @return self
      */
-    private function _setRestRoute(string $method, $path, $handler = null)
+    protected function restRoute(string $method, $path, $handler = null)
     {
         assert(is_string($path) || is_array($path));
         if (is_string($path) && null !== $handler) {
             $this->route($method, $path, $handler);
         }
         if (is_array($path)) foreach ($path as $subpath => $handler) {
-            $this->_setRestRoute($method, $subpath, $handler);
+            $this->restRoute($method, $subpath, $handler);
         }
         return $this;
     }
