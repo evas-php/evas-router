@@ -15,6 +15,7 @@ use Evas\Router\tests\help\RoutingHelperTrait;
 
 use Evas\Router\tests\help\admin\ListController;
 use Evas\Router\tests\help\cabinet\ProfileController;
+use Evas\Router\tests\help\CustomController;
 use Evas\Router\tests\help\middlewares\Access;
 use Evas\Router\tests\help\models\User;
 
@@ -72,7 +73,6 @@ class RouterTest extends \Codeception\Test\Unit
         ->default('404.php')
         ->autoByMethod('/profile/', function () {
             $this->middleware([Access::class => 'isLogin'])
-            // ->middlewareFallback([LoginAction::class => 'auto'])
             ->classCustom(ProfileController::class)
             ->methodPostfix('Action');
         })
@@ -94,6 +94,10 @@ class RouterTest extends \Codeception\Test\Unit
         ->autoByClass('/auth/', 'POST', function () {
             $this->classPrefix('Evas\\Router\\tests\\help\\auth\\')
             ->classPostfix('Action');
+        })
+        ->map('/custom/', function () {
+            $this->controllerClass(CustomController::class)
+            ->get('', function () {return get_called_class();});
         })
         ->autoByFile('/', function () {
             $this
@@ -119,6 +123,14 @@ class RouterTest extends \Codeception\Test\Unit
         $this->assertReturned('user 0', '/users/0');
         $this->assertReturned('user 1', '/users/1');
         $this->assertReturned('user 1000', '/users/1000');
+    }
+
+    /**
+     * Тест кастомного контроллера файлов и функций
+     */
+    public function testCustomFilesAndFunctionsController()
+    {
+        $this->assertReturned(CustomController::class, '/custom/');
     }
 
     /**
