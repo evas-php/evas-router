@@ -7,13 +7,15 @@
 namespace Evas\Router\Routers;
 
 use \Exception;
-use Evas\Base\Interfaces\AppInterface;
+use Evas\Http\HttpRequest;
 use Evas\Http\Interfaces\RequestInterface;
+
 use Evas\Router\Exceptions\RouterException;
 use Evas\Router\Exceptions\RouterResultException;
 use Evas\Router\Interfaces\RouterInterface;
 use Evas\Router\Interfaces\RouterResultInterface;
 use Evas\Router\RouterResult;
+
 use Evas\Router\Traits\RouterAliasesTrait;
 use Evas\Router\Traits\RouterControllerTrait;
 use Evas\Router\Traits\RouterGroupTrait;
@@ -26,11 +28,15 @@ class MapRouter implements RouterInterface
     use RouterAliasesTrait, RouterControllerTrait, RouterGroupTrait,
     RouterMiddlewaresTrait, RouterRestTrait, RouterRoutesTrait;
 
+    /** @var RouterInterface|null родительский роутер */
     protected $parent;
+    /** @var mixed обработчик маршрута по умолчанию */
     protected $default;
-    protected $request;
-    protected $app;
 
+    /**
+     * Конструктор.
+     * @param RouterInterface|null родительский роутер
+     */
     public function __construct(RouterInterface &$parent = null)
     {
         if (!empty($parent)) {
@@ -38,31 +44,33 @@ class MapRouter implements RouterInterface
             $this->aliases($parent->getAliases());
             $this->controllerClass($parent->getControllerClass());
             $this->middlewares($parent->getMiddlewares());
+            $this->viewDir($parent->getViewDir());
         }
     }
 
+    /**
+     * Установка обработчика маршрута по умолчанию.
+     * @param mixed обработчик
+     * @return self
+     */
     public function default($handler): RouterInterface
     {
         $this->default = &$handler;
         return $this;
     }
 
-    public function routing(RequestInterface $request, AppInterface $app = null): ?RouterResultInterface
-    {
-        $this->withRequest($request);
-        if (!empty($app)) $this->withApp($app);
-        if (empty($this->app)) {
-            throw new RouterException('Router not has app');
-        }
-        return $this->realRouting($request->getMethod(), $request->getPath());
-    }
-
-    public function newResult($handler, array $args = null): ?RouterResultInterface
+    /**
+     * Получение объекта результата роутинга.
+     * @param mixed обработчик
+     * @param array|null ааргументы обработчика
+     * @return RouterResultInterface результат роутинга
+     */
+    public function newResult($handler, array $args = null): RouterResultInterface
     {
         $result = new RouterResult($handler, $args, $this->middlewares);
         $result->controllerClass($this->controllerClass);
-        $result->withApp($this->app);
         $result->withRequest($this->request);
+        $result->viewDir($this->viewDir);
         $result->resolve();
         return $result;
         // try {
@@ -73,8 +81,48 @@ class MapRouter implements RouterInterface
         // }
     }
 
-    protected function realRouting(string $method, string $uri, array $args = null): ?RouterResultInterface
+    /**
+     * Роутинг по маппингу маршрутов.
+     * @param string метод
+     * @param string uri
+     * @param array|null аргументы обработчика результата
+     * @return RouterResultInterface|null результат роутинга
+     */
+    protected function mapRouting(string $method, string $uri, array $args = null): ?RouterResultInterface
     {
+        $routes = $this->getRoutesByMethodWithAll($method);
+        foreach ($routes as $path => &$handler) {
+            if (preg_match($this->preparePath($path), $uri, $matches)) {
+                array_shift($matches);
+                $args = array_merge($args ?? [], $matches);
+                if ($handler instanceof RouterInterface) {
+                    $handlerUri = array_pop($args) ?? '';
+                    $handler->withRequest($this->request);
+                    $result = $handler->routing($handlerUri, $method, $args);
+                    if (empty($result)) continue;
+                    else return $result;
+                }
+                return $this->newResult($handler, $args);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Роутинг по uri и методу.
+     * @param string uri
+     * @param string|null метод
+     * @param array|null аргументы обработчика результата
+     * @return RouterResultInterface|null результат
+     * @throws RouterException
+     */
+    public function routing(string $uri, string $method = null, array $args = null): ?RouterResultInterface
+    {
+        if (empty($method)) $method = 'GET';
+        if (empty($this->request)) {
+            $request = (new HttpRequest)->withMethod($method)->withUri($uri);
+            $this->withRequest($request);
+        }
         try {
             $result = $this->mapRouting($method, $uri, $args);
         } catch (RouterResultException $e) {
@@ -92,24 +140,14 @@ class MapRouter implements RouterInterface
         throw new RouterException('404. Not Found');
     }
 
-    protected function mapRouting(string $method, string $uri, array $args = null): ?RouterResultInterface
+    /**
+     * Роутинг по объекту запроса.
+     * @param RequestInterface объект запроса
+     * @return RouterResultInterface|null результат
+     */
+    public function requestRouting(RequestInterface $request): ?RouterResultInterface
     {
-        $routes = $this->getRoutesByMethodWithAll($method);
-        foreach ($routes as $path => &$handler) {
-            if (preg_match($this->preparePath($path), $uri, $matches)) {
-                array_shift($matches);
-                $args = array_merge($args ?? [], $matches);
-                if ($handler instanceof RouterInterface) {
-                    $handlerUri = array_pop($args) ?? '';
-                    $handler->withApp($this->app);
-                    $handler->withRequest($this->request);
-                    $result = $handler->realRouting($method, $handlerUri, $args);
-                    if (empty($result)) continue;
-                    else return $result;
-                }
-                return $this->newResult($handler, $args);
-            }
-        }
-        return null;
+        $this->withRequest($request);
+        return $this->routing($request->getPath(), $request->getMethod());
     }
 }
