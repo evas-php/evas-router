@@ -6,7 +6,6 @@
  */
 namespace Evas\Router\Interfaces;
 
-use Evas\Base\Interfaces\AppInterface;
 use Evas\Http\Interfaces\RequestInterface;
 use Evas\Router\Interfaces\RouterResultInterface;
 
@@ -25,25 +24,25 @@ interface RouterInterface
      */
     public function default($handler): RouterInterface;
 
-    // /**
-    //  * Роутинг по пути и методу.
-    //  * @param string метод
-    //  * @param string путь
-    //  * @param array аргументы uri
-    //  * @return RouterResultInterface
-    //  */
-    // public function routing(string $method, string $uri, array $args = null): ?RouterResultInterface;
+    /**
+     * Роутинг по uri и методу.
+     * @param string uri
+     * @param string|null метод
+     * @param array аргументы uri
+     * @return RouterResultInterface
+     */
+    public function routing(string $uri, string $method = null, array $args = null): ?RouterResultInterface;
 
     /**
      * Роутинг по объекту запроса.
      * @param RequestInterface объект запроса
-     * @param AppInterface|null объект приложения
      * @return RouterResultInterface
      * @throws RouterException
      */
-    public function routing(RequestInterface $request, AppInterface $app = null): ?RouterResultInterface;
+    public function requestRouting(RequestInterface $request): ?RouterResultInterface;
 
 
+    // RouterRoutesTrait
 
     /**
      * Установка маршрута.
@@ -71,64 +70,7 @@ interface RouterInterface
     public function getRoutes(): array;
 
 
-
-    /**
-     * Установка маршрута/маршрутов HTTP метода GET.
-     * @param string|array путь или массив маршрутов
-     * @param mixed|null обработчик пути
-     * @return self
-     */
-    public function get($path, $handler = null): RouterInterface;
-
-    /**
-     * Установка маршрута/маршрутов HTTP метода POST.
-     * @param string|array путь или массив маршрутов
-     * @param mixed|null обработчик пути
-     * @return self
-     */
-    public function post($path, $handler = null): RouterInterface;
-
-    /**
-     * Установка маршрута/маршрутов HTTP метода PUT.
-     * @param string|array путь или массив маршрутов
-     * @param mixed|null обработчик пути
-     * @return self
-     */
-    public function put($path, $handler = null): RouterInterface;
-
-    /**
-     * Установка маршрута/маршрутов HTTP метода DELETE.
-     * @param string|array путь или массив маршрутов
-     * @param mixed|null обработчик пути
-     * @return self
-     */
-    public function delete($path, $handler = null): RouterInterface;
-
-    /**
-     * Установка маршрута/маршрутов HTTP метода PATCH.
-     * @param string|array путь или массив маршрутов
-     * @param mixed|null обработчик пути
-     * @return self
-     */
-    public function patch($path, $handler = null): RouterInterface;
-
-    /**
-     * Установка маршрута/маршрутов HTTP метода OPTIONS.
-     * @param string|array путь или массив маршрутов
-     * @param mixed|null обработчик пути
-     * @return self
-     */
-    public function options($path, $handler = null): RouterInterface;
-
-    /**
-     * Установка маршрута/маршрутов для всех HTTP методов.
-     * @param string|array путь или массив маршрутов
-     * @param mixed|null обработчик пути
-     * @return self
-     */
-    public function all($path, $handler = null): RouterInterface;
-
-
+    // RouterAliasesTrait
 
     /**
      * Добавление алиаса.
@@ -152,6 +94,7 @@ interface RouterInterface
     public function getAliases(): array;
 
 
+    // RouterMiddlewaresTrait
 
     /**
      * Добавление middleware.
