@@ -40,6 +40,9 @@ class RouterResult implements RouterResultInterface
     /** @var array маппинг контроллеров для избежания дубликатов */
     protected $controllersMap = [];
 
+    /** @var mixed возвращенный результат последнего обработчика */
+    public $returned;
+
     /**
      * Конструктор.
      * @param mixed|null обработчик
@@ -81,7 +84,7 @@ class RouterResult implements RouterResultInterface
         if (!class_exists($controllerClass, true)) {
             throw new FileNotFoundException("Controller class \"$controllerClass\" not found");
         }
-        $controller = new $controllerClass($this->app, $this->request);
+        $controller = new $controllerClass($this->request, $this->viewDir);
         $this->controllersMap[$controllerClass] = &$controller;
         return $controller;
     }
@@ -174,16 +177,22 @@ class RouterResult implements RouterResultInterface
             try {
                 $this->prepareList($this->middlewares);
             } catch (Exception $e) {
-                $message = 'The route middleware could not be resolved: '. $e->getMessage();
-                throw new RouterResultException($message, $e->getCode(), $e->getPrevious());
+                throw new RouterResultException(sprintf(
+                    'The route middleware could not be resolved: %s', 
+                    $e->getMessage()), $e->getCode(), $e->getPrevious()
+                );
             }
         }
         try {
-            if (PhpHelper::isNumericArray($this->handler)) $this->prepareList($this->handler);
-            else $this->prepareSingle($this->handler);
+            if (PhpHelper::isNumericArray($this->handler)) 
+                $this->prepareList($this->handler);
+            else 
+                $this->prepareSingle($this->handler);
         } catch (Exception $e) {
-            $message = 'The route handler could not be resolved: '. $e->getMessage();
-            throw new RouterResultException($message, $e->getCode(), $e->getPrevious());
+            throw new RouterResultException(sprintf(
+                'The route handler could not be resolved: %s', 
+                $e->getMessage()), $e->getCode(), $e->getPrevious()
+            );
         }
         return $this;
     }
@@ -197,9 +206,12 @@ class RouterResult implements RouterResultInterface
         // подготовка обработчика/обработчиков
         if (!is_array($this->preparedHandlers)) $this->prepare();
         // запуск обработчика
+        $returned = null;
         foreach ($this->preparedHandlers as &$handler) {
             list($method, $args) = $handler;
-            if (false === call_user_func_array($method, $args)) break;
+            $returned = call_user_func_array($method, $args);
+            if (false === $returned) break;
         }
+        $this->returned = $returned;
     }
 }
