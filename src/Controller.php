@@ -22,18 +22,20 @@ class Controller
      */
     use IncludeTrait;
 
-    /** @var string путь файлов отображения относительно приложения */
-    public $viewPath = EVAS_VIEW_PATH;
+    /** @var string директория файлов отображения */
+    public $viewDir = EVAS_VIEW_PATH;
     /** @var RequestInterface объект запроса */
     public $request;
 
     /**
      * Конструктор.
      * @param RequestInterface объект запроса
+     * @param string|null директория файлов отображения
      */
-    public function __construct(RequestInterface &$request)
+    public function __construct(RequestInterface &$request, string $viewDir = null)
     {
         $this->request = &$request;
+        $this->viewDir = App::resolveByApp($viewDir ?? $this->viewDir);
         if (method_exists($this, '_before')) {
             $this->_before();
         }
@@ -44,10 +46,14 @@ class Controller
      * @param string относительный путь отображения
      * @return string абсолютный путь отображения
      */
-    public function absoluteViewPath(string $filename): string
+    public function resolveViewPath(string $filename): string
     {
-        $filename = $this->viewPath . $filename;
-        return App::absolutePathByApp($filename);
+        if ($this->canInclude($filename)) {
+            return $filename;
+        }
+        $filename = App::relativePathByApp($filename);
+        $filename = App::resolveByApp($this->viewDir . $filename);
+        return $filename;
     }
 
     /**
@@ -58,7 +64,7 @@ class Controller
      */
     public function view(string $filename, array $args = null, object &$context = null)
     {
-        return $this->include($this->absoluteViewPath($filename), $args, $context);
+        $this->include($this->resolveViewPath($filename), $args, $context);
     }
 
     /**
@@ -68,7 +74,7 @@ class Controller
      */
     public function canView(string $filename): bool
     {
-        return $this->canInclude($this->absoluteViewPath($filename));
+        return $this->canInclude($this->resolveViewPath($filename));
     }
 
     /**
@@ -77,6 +83,6 @@ class Controller
      */
     public function throwIfNotCanView(string $filename)
     {
-        return $this->throwIfNotCanInclude($this->absoluteViewPath($filename));
+        return $this->throwIfNotCanInclude($this->resolveViewPath($filename));
     }
 }
