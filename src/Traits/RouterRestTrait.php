@@ -6,86 +6,30 @@
  */
 namespace Evas\Router\Traits;
 
+use Evas\Base\Help\PhpHelp;
 use Evas\Router\Interfaces\RouterInterface;
+
+// список доступных REST-методов
+if (!defined('EVAS_ROUTER_REST_METHODS')) {
+    define('EVAS_ROUTER_REST_METHODS', [
+        'GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'
+    ]);
+} else {
+    if (!PhpHelp::isNumericArray(EVAS_ROUTER_REST_METHODS)) {
+        throw new \RuntimeException(sprintf(
+            'constant EVAS_ROUTER_REST_METHODS must be a numeric array, %s given',
+            PhpHelp::getType(EVAS_ROUTER_REST_METHODS, true)
+        ));
+    }
+}
 
 trait RouterRestTrait
 {
-    /**
-     * Установка маршрута/маршрутов HTTP метода GET.
-     * @param string|array путь или массив маршрутов
-     * @param mixed|null обработчик пути
-     * @return self
-     */
-    public function get($path, $handler = null): RouterInterface
-    {
-        return $this->restRoute('GET', $path, $handler);
-    }
+    /** @static array список доступных REST-методов */
+    protected static $restMethods = EVAS_ROUTER_REST_METHODS;
 
-    /**
-     * Установка маршрута/маршрутов HTTP метода POST.
-     * @param string|array путь или массив маршрутов
-     * @param mixed|null обработчик пути
-     * @return self
-     */
-    public function post($path, $handler = null): RouterInterface
-    {
-        return $this->restRoute('POST', $path, $handler);
-    }
-
-    /**
-     * Установка маршрута/маршрутов HTTP метода PUT.
-     * @param string|array путь или массив маршрутов
-     * @param mixed|null обработчик пути
-     * @return self
-     */
-    public function put($path, $handler = null): RouterInterface
-    {
-        return $this->restRoute('PUT', $path, $handler);
-    }
-
-    /**
-     * Установка маршрута/маршрутов HTTP метода DELETE.
-     * @param string|array путь или массив маршрутов
-     * @param mixed|null обработчик пути
-     * @return self
-     */
-    public function delete($path, $handler = null): RouterInterface
-    {
-        return $this->restRoute('DELETE', $path, $handler);
-    }
-
-    /**
-     * Установка маршрута/маршрутов HTTP метода PATCH.
-     * @param string|array путь или массив маршрутов
-     * @param mixed|null обработчик пути
-     * @return self
-     */
-    public function patch($path, $handler = null): RouterInterface
-    {
-        return $this->restRoute('PATCH', $path, $handler);
-    }
-
-    /**
-     * Установка маршрута/маршрутов HTTP метода OPTIONS.
-     * @param string|array путь или массив маршрутов
-     * @param mixed|null обработчик пути
-     * @return self
-     */
-    public function options($path, $handler = null): RouterInterface
-    {
-        return $this->restRoute('OPTIONS', $path, $handler);
-    }
-
-    /**
-     * Установка маршрута/маршрутов для всех HTTP методов.
-     * @param string|array путь или массив маршрутов
-     * @param mixed|null обработчик пути
-     * @return self
-     */
-    public function all($path, $handler = null): RouterInterface
-    {
-        return $this->restRoute('ALL', $path, $handler);
-    }
+    /** @static bool была ли подготовка доступных REST-методов */
+    protected static $restMethodsPrepared = false;
 
     /**
      * Установка маршрута/маршрутов.
@@ -93,10 +37,16 @@ trait RouterRestTrait
      * @param string|array путь или массив маршрутов
      * @param mixed|null обработчик пути
      * @return self
+     * @throws \InvalidArgumentException
      */
     protected function restRoute(string $method, $path, $handler = null)
     {
-        assert(is_string($path) || is_array($path));
+        if (!is_string($path) && !is_array($path)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Argument 1 passed to %s() must be string or assoc array, %s given',
+                __METHOD__, PhpHelp::getType($path, true)
+            ));
+        }
         if (is_string($path) && null !== $handler) {
             $this->route($method, $path, $handler);
         }
@@ -104,5 +54,51 @@ trait RouterRestTrait
             $this->restRoute($method, $subpath, $handler);
         }
         return $this;
+    }
+
+    /**
+     * Получение поддерживаемых REST-методов.
+     * @return array
+     */
+    public static function getRestMethods(): array
+    {
+        if (!static::$restMethodsPrepared) {
+            array_walk(static::$restMethods, function (&$value) {
+                $value = strtolower($value);
+            });
+            static::$restMethods[] = 'all';
+            static::$restMethods = array_unique(static::$restMethods);
+            static::$restMethodsPrepared = true;
+        }
+        return static::$restMethods;
+    }
+
+    /**
+     * Проверка поддержки REST-метода.
+     * @param string метод
+     * @return bool
+     */
+    public static function isSupportRestMethod(string $method): bool
+    {
+        return in_array(strtolower($method), static::getRestMethods());
+    }
+
+
+    /**
+     * Магия для установка маршрута/маршрутов доступного REST-метода.
+     * @param string имя REST-метода
+     * @param array|null параметры маршрута
+     * @return self
+     * @throws \BadMethodCallException
+     */
+    public function __call(string $name, array $args = null)
+    {
+        if (static::isSupportRestMethod($name)) {
+            return $this->restRoute($name, ...$args);
+        }
+        throw new \BadMethodCallException(sprintf(
+            'Call to undefined method %s::%s()',
+            get_called_class(), $name
+        ));
     }
 }
