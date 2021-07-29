@@ -6,7 +6,7 @@
  */
 namespace Evas\Router\Traits;
 
-use Evas\Base\Interfaces\AppInterface;
+use Evas\Base\App;
 use Evas\Http\Interfaces\RequestInterface;
 use Evas\Router\Controller;
 use Evas\Router\Interfaces\RouterInterface;
@@ -23,8 +23,9 @@ trait RouterControllerTrait
 
     /** @var RequestInterface объект запроса */
     protected $request;
-    /** @var object|null объект приложения */
-    protected $app;
+
+    /** @var string директория отображения */
+    protected $viewDir;
     
     /**
      * Установка имени класса контроллера.
@@ -58,13 +59,21 @@ trait RouterControllerTrait
     }
 
     /**
-     * Установка объекта приложения.
-     * @param AppInterface объект приложения
-     * @return self
+     * Установка view директории контроллера.
+     * @param string|null директория или путь
      */
-    public function withApp(AppInterface &$app)
+    public function viewDir(string $viewDir = null)
     {
-        $this->app = &$app;
+        $this->viewDir = App::resolveByApp($viewDir);
         return $this;
+    }
+
+    /**
+     * Получение view директории контроллера.
+     * @return string|null директория или путь
+     */
+    public function getViewDir(): ?string
+    {
+        return $this->viewDir;
     }
 }
