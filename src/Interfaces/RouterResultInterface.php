@@ -17,7 +17,7 @@ interface RouterResultInterface
     public function __construct($handler = null, array $args = null, array $middlewares = null);
 
     /**
-     * Вызов обработчика маршрута.
+     * Обработка маршрута.
      */
     // public function resolve();
 }
