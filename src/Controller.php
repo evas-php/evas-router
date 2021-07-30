@@ -7,7 +7,6 @@
 namespace Evas\Router;
 
 use Evas\Base\App;
-use Evas\Base\Traits\IncludeTrait;
 use Evas\Http\Interfaces\RequestInterface;
 
 /**
@@ -17,11 +16,6 @@ if (!defined('EVAS_VIEW_PATH')) define('EVAS_VIEW_PATH', 'view/');
 
 class Controller
 {
-    /**
-     * Подключаем поддержку подключения файла.
-     */
-    use IncludeTrait;
-
     /** @var string директория файлов отображения */
     public $viewDir = EVAS_VIEW_PATH;
     /** @var RequestInterface объект запроса */
@@ -48,7 +42,7 @@ class Controller
      */
     public function resolveViewPath(string $filename): string
     {
-        if ($this->canInclude($filename)) {
+        if (App::canInclude($filename)) {
             return $filename;
         }
         $filename = App::relativePathByApp($filename);
@@ -64,7 +58,7 @@ class Controller
      */
     public function view(string $filename, array $args = null, object &$context = null)
     {
-        $this->include($this->resolveViewPath($filename), $args, $context);
+        App::include($this->resolveViewPath($filename), $args, $context);
     }
 
     /**
@@ -74,7 +68,7 @@ class Controller
      */
     public function canView(string $filename): bool
     {
-        return $this->canInclude($this->resolveViewPath($filename));
+        return App::canInclude($this->resolveViewPath($filename));
     }
 
     /**
@@ -83,6 +77,6 @@ class Controller
      */
     public function throwIfNotCanView(string $filename)
     {
-        return $this->throwIfNotCanInclude($this->resolveViewPath($filename));
+        return App::throwIfNotCanInclude($this->resolveViewPath($filename));
     }
 }
