@@ -7,7 +7,7 @@
 namespace Evas\Router\Traits;
 
 use \InvalidArgumentException;
-use Evas\Base\Help\PhpHelper;
+use Evas\Base\Help\PhpHelp;
 use Evas\Router\Interfaces\RouterInterface;
 
 trait RouterRoutesTrait
@@ -41,7 +41,7 @@ trait RouterRoutesTrait
                 'Argument 3 $handler must be a string or an array 
                 or a \Closure or an instance of $s, %s given',
                 RouterInterface::class,
-                PhpHelper::getType($handler)
+                PhpHelp::getType($handler)
             ));
         }
         $this->routes[$method][$path] = $handler;
