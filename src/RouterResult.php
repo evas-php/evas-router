@@ -10,7 +10,7 @@ use \Closure;
 use \Exception;
 use Evas\Base\App;
 use Evas\Base\Exceptions\FileNotFoundException;
-use Evas\Base\Help\PhpHelper;
+use Evas\Base\Help\PhpHelp;
 use Evas\Http\Interfaces\RequestInterface;
 use Evas\Router\Exceptions\RouterResultException;
 use Evas\Router\Interfaces\RouterResultInterface;
@@ -150,7 +150,7 @@ class RouterResult implements RouterResultInterface
     {
         if ($handler instanceof \Closure) $this->prepareClosure($handler);
         else if (is_string($handler)) $this->prepareFile($handler);
-        else if (PhpHelper::isAssoc($handler)) $this->prepareClass($handler);
+        else if (PhpHelp::isAssoc($handler)) $this->prepareClass($handler);
     }
 
     /**
@@ -184,7 +184,7 @@ class RouterResult implements RouterResultInterface
             }
         }
         try {
-            if (PhpHelper::isNumericArray($this->handler)) 
+            if (PhpHelp::isNumericArray($this->handler)) 
                 $this->prepareList($this->handler);
             else 
                 $this->prepareSingle($this->handler);
