@@ -64,7 +64,7 @@ trait RouterControllerTrait
      */
     public function viewDir(string $viewDir = null)
     {
-        $this->viewDir = App::resolveByApp($viewDir);
+        if ($viewDir) $this->viewDir = App::resolveByApp($viewDir);
         return $this;
     }
 
