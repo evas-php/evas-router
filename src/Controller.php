@@ -58,6 +58,7 @@ class Controller
      */
     public function view(string $filename, array $args = null, object &$context = null)
     {
+        if (!$context) $context = &$this;
         App::include($this->resolveViewPath($filename), $args, $context);
     }
 
