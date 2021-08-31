@@ -55,7 +55,12 @@ class AutoRouterByFile extends AbstractAutoRouter
      */
     public function generateHandler(string $path): string
     {
-        if (empty($path) || mb_strlen($path) - 1 === strrpos($path, '/')) $path .= 'index';
-        return $this->filePrefix . $path . $this->filePostfix;
+        if (empty($path)) $path = '/index';
+        else if (mb_strlen($path) - 1 === strrpos($path, '/')) $path .= 'index';
+        if (strpos($path, '/') === 0 && mb_strlen($this->filePrefix) - 1 === strrpos($this->filePrefix, '/')) {
+            $path = substr($path, 1);
+        }
+        $path = $this->filePrefix . $path . $this->filePostfix;
+        return $path;
     }
 }
