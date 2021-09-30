@@ -14,6 +14,7 @@ trait RouterAliasesTrait
     protected $aliases = [
         ':any' => '.*',
         ':int' => '[0-9]{1,}',
+        ':id' => '[1-9]+\d*',
     ];
 
     /**
