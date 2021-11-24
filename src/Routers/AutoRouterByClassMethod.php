@@ -44,6 +44,9 @@ class AutoRouterByClassMethod extends AbstractAutoRouter
     /** @var string постфикс метода */
     public $methodPostfix = EVAS_AUTOROUTER_METHOD_POSTFIX;
 
+    /** @var bool использовать индексный класс */
+    public $useIndexClass = false;
+
     /**
      * Установка/сброс префикса класса.
      * @param string|null
@@ -100,6 +103,17 @@ class AutoRouterByClassMethod extends AbstractAutoRouter
     }
 
     /**
+     * Установка/сбор использования индексного файла.
+     * @param bool|null
+     * @return self
+     */
+    public function useIndexClass(bool $use = true)
+    {
+        $this->useIndexClass = $use;
+        return $this;
+    }
+
+    /**
      * Генерация обработчика результата роутинга.
      * @param string путь
      * @return array обработчик вида ['class' => 'method']
@@ -115,7 +129,13 @@ class AutoRouterByClassMethod extends AbstractAutoRouter
         if (empty($this->classCustom)) {
             $method = array_pop($parts);
             $class = implode('\\', $parts);
-            if (empty($class)) $class = 'Index';
+            if (empty($class)) {
+                if ($this->useIndexClass) $class = 'Index';
+                else {
+                    $class = $method;
+                    $method = null;
+                }
+            }
             $class = $this->classPrefix . $class . $this->classPostfix;
         } else {
             $method = implode('', $parts);
