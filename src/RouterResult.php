@@ -6,8 +6,6 @@
  */
 namespace Evas\Router;
 
-use \Closure;
-use \Exception;
 use Evas\Base\App;
 use Evas\Base\Exceptions\FileNotFoundException;
 use Evas\Base\Help\PhpHelp;
@@ -111,9 +109,9 @@ class RouterResult implements RouterResultInterface
 
     /**
      * Подготовка обработчика в виде замыкания.
-     * @param Closure замыкание
+     * @param \Closure замыкание
      */
-    protected function prepareClosure(Closure &$handler)
+    protected function prepareClosure(\Closure &$handler)
     {
         $class = $this->newController();
         $method = $handler->bindTo($class);
@@ -176,7 +174,7 @@ class RouterResult implements RouterResultInterface
         if (!empty($this->middlewares)) {
             try {
                 $this->prepareList($this->middlewares);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 throw new RouterResultException(sprintf(
                     'The route middleware could not be resolved: %s', 
                     $e->getMessage()), $e->getCode(), $e->getPrevious()
@@ -188,7 +186,7 @@ class RouterResult implements RouterResultInterface
                 $this->prepareList($this->handler);
             else 
                 $this->prepareSingle($this->handler);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new RouterResultException(sprintf(
                 'The route handler could not be resolved: %s', 
                 $e->getMessage()), $e->getCode(), $e->getPrevious()
