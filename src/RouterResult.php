@@ -133,9 +133,14 @@ class RouterResult implements RouterResultInterface
             $class = $this->newController($className);
             if (!method_exists($class, $method)) {
                 throw new RouterResultException("Class $className does not contain method $method");
-                
             }
-            $this->preparedHandlers[] = [[$class, $method], $this->args];
+            $handler = [$class, $method];
+            if (!is_callable($handler)) {
+                throw new RouterResultException(sprintf(
+                    'Is not callable class method %s::%s', get_class($class), $method
+                ));
+            }
+            $this->preparedHandlers[] = [$handler, $this->args];
             return;
         }
     }
@@ -208,7 +213,10 @@ class RouterResult implements RouterResultInterface
         foreach ($this->preparedHandlers as &$handler) {
             list($method, $args) = $handler;
             $returned = call_user_func_array($method, $args);
-            if (false === $returned) break;
+            // if (false === $returned) break;
+            if (false === $returned) {
+                throw new RouterResultException('Route handler returned false');
+            }
         }
         $this->returned = $returned;
     }
