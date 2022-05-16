@@ -9,6 +9,7 @@ namespace Evas\Router\Traits;
 use \InvalidArgumentException;
 use Evas\Base\Help\PhpHelp;
 use Evas\Router\Interfaces\RouterInterface;
+use Evas\Router\Routers\NestedRouterWrap;
 
 trait RouterRoutesTrait
 {
@@ -36,11 +37,11 @@ trait RouterRoutesTrait
     public function route(string $method, string $path, $handler): RouterInterface
     {
         $method = strtoupper($method);
-        if (!$this->isCorrectHandlerType($handler) && !$handler instanceof RouterInterface) {
+        if (!$this->isCorrectHandlerType($handler) && !$handler instanceof NestedRouterWrap) {
             throw new InvalidArgumentException(sprintf(
                 'Argument 3 $handler must be a string or an array 
-                or a \Closure or an instance of $s, %s given',
-                RouterInterface::class,
+                or a \Closure or an instance of %s, %s given',
+                NestedRouterWrap::class,
                 PhpHelp::getType($handler)
             ));
         }

@@ -12,6 +12,7 @@ use Evas\Router\Routers\AutoRouterByClassMethod;
 use Evas\Router\Routers\AutoRouterByFile;
 use Evas\Router\Routers\AutoRouterByFunc;
 use Evas\Router\Routers\MapRouter;
+use Evas\Router\Routers\NestedRouterWrap;
 
 trait RouterGroupTrait
 {
@@ -87,7 +88,7 @@ trait RouterGroupTrait
             // callback передан 3 аргументом, вместо метода
             if (!is_callable($method)) {
                 throw new \InvalidArgumentException(sprintf(
-                    'Argument 3 passed to %s() if usage without route method must be callable, %s given',
+                    'Argument 3 passed to %s() if usage without route method must be a \Closure, %s given',
                     __METHOD__, gettype($method)
                 ));
             }
@@ -112,12 +113,12 @@ trait RouterGroupTrait
             }
         }
 
-        $callback = $callback->bindTo($router);
-        $callback();
+        // оборачиваем вложенный роутера в обёртку отложенной сборки
+        $callbackWrap = new NestedRouterWrap($callback, $router);
 
         if (!is_array($method)) $method = [$method];
         foreach ($method as $sub) {
-            $this->$sub($path . '(:any)', $router);
+            $this->$sub($path . '(:any)', $callbackWrap);
         }
         return $this;
     }

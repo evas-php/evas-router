@@ -15,6 +15,8 @@ use Evas\Router\Exceptions\RouterResultException;
 use Evas\Router\Interfaces\RouterInterface;
 use Evas\Router\Interfaces\RouterResultInterface;
 use Evas\Router\RouterResult;
+use Evas\Router\Routers\NestedRouterWrap;
+
 
 use Evas\Router\Traits\RouterAliasesTrait;
 use Evas\Router\Traits\RouterControllerTrait;
@@ -95,7 +97,9 @@ class MapRouter implements RouterInterface
             if (preg_match($this->preparePath($path), $uri, $matches)) {
                 array_shift($matches);
                 $args = array_merge($args ?? [], $matches);
-                if ($handler instanceof RouterInterface) {
+                // отложенная сборка и вызов вложенного роутера
+                if ($handler instanceof NestedRouterWrap) {
+                    $handler = $handler->build();
                     $handlerUri = array_pop($args) ?? '';
                     $handler->withRequest($this->request);
                     $result = $handler->routing($handlerUri, $method, $args);
