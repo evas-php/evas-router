@@ -13,12 +13,12 @@ use Evas\Router\Interfaces\ControllerInterface;
 /**
  * Константы для свойств класса по умолчанию.
  */
-if (!defined('EVAS_VIEWS_PATH')) define('EVAS_VIEWS_PATH', 'views/');
+if (!defined('EVAS_VIEWS_DIR')) define('EVAS_VIEWS_DIR', 'views/');
 
 class Controller implements ControllerInterface
 {
     /** @var string директория файлов отображения */
-    public $viewsDir = EVAS_VIEWS_PATH;
+    public $viewsDir = EVAS_VIEWS_DIR;
     /** @var RequestInterface объект запроса */
     public $request;
 
