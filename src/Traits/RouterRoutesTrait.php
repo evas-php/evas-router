@@ -23,14 +23,14 @@ trait RouterRoutesTrait
      */
     public function isCorrectHandlerType(&$handler): bool
     {
-        return is_array($handler) || is_string($handler) || is_callable($handler);
+        return is_array($handler) || is_string($handler) || $handler instanceof \Closure;
     }
 
     /**
      * Установка маршрута.
      * @param string метод
      * @param string путь
-     * @param mixed обработчик
+     * @param string|\Closure|array обработчик
      * @return RouterInterface
      * @throws InvalidArgumentException
      */
@@ -53,7 +53,7 @@ trait RouterRoutesTrait
      * Установка маршрута с несколькими методами.
      * @param array методы
      * @param string путь
-     * @param mixed обработчик
+     * @param string|\Closure|array обработчик
      * @return RouterInterface
      */
     public function mergeRoute(array $methods, string $path, $handler): RouterInterface
