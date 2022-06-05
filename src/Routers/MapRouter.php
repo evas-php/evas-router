@@ -45,7 +45,6 @@ class MapRouter implements RouterInterface
             $this->parent = &$parent;
             $this->aliases($parent->getAliases());
             $this->controllerClass($parent->getControllerClass());
-            $this->middlewares($parent->getMiddlewares());
             $this->viewDir($parent->getViewDir());
         }
     }
@@ -69,7 +68,7 @@ class MapRouter implements RouterInterface
      */
     public function newResult($handler, array $args = null): RouterResultInterface
     {
-        $result = new RouterResult($handler, $args, $this->middlewares);
+        $result = new RouterResult($handler, $args, $this->getMiddlewares());
         $result->controllerClass($this->controllerClass);
         $result->withRequest($this->request);
         $result->viewDir($this->viewDir);

@@ -97,19 +97,12 @@ interface RouterInterface
     // RouterMiddlewaresTrait
 
     /**
-     * Добавление middleware.
-     * @param mixed middleware
+     * Добавление middleware/middlewares.
+     * @param string|\Closure|array ...middleware
      * @return RouterInterface
      * @throws RouterException
      */
-    public function middleware($middleware): RouterInterface;
-
-    /**
-     * Добавление middlewares.
-     * @param array
-     * @return RouterInterface
-     */
-    public function middlewares(array $middlewares): RouterInterface;
+    public function middleware(...$middlewares): RouterInterface;
 
     /**
      * Получение middlewares.
