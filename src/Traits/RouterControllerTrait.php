@@ -25,7 +25,7 @@ trait RouterControllerTrait
     protected $request;
 
     /** @var string директория отображения */
-    protected $viewDir;
+    protected $viewsDir;
     
     /**
      * Установка имени класса контроллера.
@@ -62,9 +62,9 @@ trait RouterControllerTrait
      * Установка view директории контроллера.
      * @param string|null директория или путь
      */
-    public function viewDir(string $viewDir = null)
+    public function viewsDir(string $viewsDir = null)
     {
-        if ($viewDir) $this->viewDir = App::resolveByApp($viewDir);
+        if ($viewsDir) $this->viewsDir = App::resolveByApp($viewsDir);
         return $this;
     }
 
@@ -72,8 +72,8 @@ trait RouterControllerTrait
      * Получение view директории контроллера.
      * @return string|null директория или путь
      */
-    public function getViewDir(): ?string
+    public function getViewsDir(): ?string
     {
-        return $this->viewDir;
+        return $this->viewsDir;
     }
 }

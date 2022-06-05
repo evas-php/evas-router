@@ -13,12 +13,12 @@ use Evas\Router\Interfaces\ControllerInterface;
 /**
  * Константы для свойств класса по умолчанию.
  */
-if (!defined('EVAS_VIEW_PATH')) define('EVAS_VIEW_PATH', 'view/');
+if (!defined('EVAS_VIEWS_PATH')) define('EVAS_VIEWS_PATH', 'views/');
 
 class Controller implements ControllerInterface
 {
     /** @var string директория файлов отображения */
-    public $viewDir = EVAS_VIEW_PATH;
+    public $viewsDir = EVAS_VIEWS_PATH;
     /** @var RequestInterface объект запроса */
     public $request;
 
@@ -27,10 +27,10 @@ class Controller implements ControllerInterface
      * @param RequestInterface объект запроса
      * @param string|null директория файлов отображения
      */
-    public function __construct(RequestInterface &$request, string $viewDir = null)
+    public function __construct(RequestInterface &$request, string $viewsDir = null)
     {
         $this->request = &$request;
-        $this->viewDir = App::resolveByApp($viewDir ?? $this->viewDir);
+        $this->viewsDir = App::resolveByApp($viewsDir ?? $this->viewsDir);
         if (method_exists($this, '_before')) {
             $this->_before();
         }
@@ -47,7 +47,7 @@ class Controller implements ControllerInterface
             return $filename;
         }
         $filename = App::relativePathByApp($filename);
-        $filename = App::resolveByApp($this->viewDir . $filename);
+        $filename = App::resolveByApp($this->viewsDir . $filename);
         return $filename;
     }
 

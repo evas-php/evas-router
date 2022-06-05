@@ -82,7 +82,7 @@ class RouterResult implements RouterResultInterface
         if (!class_exists($controllerClass, true)) {
             throw new FileNotFoundException("Controller class \"$controllerClass\" not found");
         }
-        $controller = new $controllerClass($this->request, $this->viewDir);
+        $controller = new $controllerClass($this->request, $this->viewsDir);
         $this->controllersMap[$controllerClass] = &$controller;
         return $controller;
     }
