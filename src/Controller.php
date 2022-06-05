@@ -8,13 +8,14 @@ namespace Evas\Router;
 
 use Evas\Base\App;
 use Evas\Http\Interfaces\RequestInterface;
+use Evas\Router\Interfaces\ControllerInterface;
 
 /**
  * Константы для свойств класса по умолчанию.
  */
 if (!defined('EVAS_VIEW_PATH')) define('EVAS_VIEW_PATH', 'view/');
 
-class Controller
+class Controller implements ControllerInterface
 {
     /** @var string директория файлов отображения */
     public $viewDir = EVAS_VIEW_PATH;
