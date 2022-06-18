@@ -84,16 +84,16 @@ class MapRouter implements RouterInterface
 
     /**
      * Роутинг по маппингу маршрутов.
+     * @param string путь
      * @param string метод
-     * @param string uri
      * @param array|null аргументы обработчика результата
      * @return RouterResultInterface|null результат роутинга
      */
-    protected function mapRouting(string $method, string $uri, array $args = null): ?RouterResultInterface
+    protected function mapRouting(string $path, string $method, array $args = null): ?RouterResultInterface
     {
         $routes = $this->getRoutesByMethodWithAll($method);
-        foreach ($routes as $path => &$handler) {
-            if (preg_match($this->preparePath($path), $uri, $matches)) {
+        foreach ($routes as $_path => &$handler) {
+            if (preg_match($this->preparePath($_path), $path, $matches)) {
                 array_shift($matches);
                 $args = array_merge($args ?? [], $matches);
                 // отложенная сборка и вызов вложенного роутера
@@ -112,22 +112,22 @@ class MapRouter implements RouterInterface
     }
 
     /**
-     * Роутинг по uri и методу.
-     * @param string uri
+     * Роутинг по пути и методу.
+     * @param string путь
      * @param string|null метод
      * @param array|null аргументы обработчика результата
      * @return RouterResultInterface|null результат
      * @throws RouterException
      */
-    public function routing(string $uri, string $method = null, array $args = null): ?RouterResultInterface
+    public function routing(string $path, string $method = null, array $args = null): ?RouterResultInterface
     {
         if (empty($method)) $method = 'GET';
         if (empty($this->request)) {
-            $request = (new HttpRequest)->withMethod($method)->withUri($uri);
+            $request = (new HttpRequest)->withMethod($method)->withUri($path);
             $this->withRequest($request);
         }
         try {
-            $result = $this->mapRouting($method, $uri, $args);
+            $result = $this->mapRouting($path, $method, $args);
         } catch (RouterResultException $e) {
             if (!empty($this->default)) {
                 return $this->newResult($this->default, ['exception' => $e]);
@@ -135,7 +135,7 @@ class MapRouter implements RouterInterface
             throw new RouterResultException($e->getMessage(), $e->getCode(), $e->getPrevious());
         }
         if (empty($result) && method_exists($this, 'autoRouting')) {
-            $result = $this->autoRouting($uri, $args);
+            $result = $this->autoRouting($path, $args);
         }
         if (!empty($result)) return $result;
         if (!empty($this->default)) return $this->newResult($this->default);

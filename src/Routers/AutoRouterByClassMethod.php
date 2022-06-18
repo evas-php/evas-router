@@ -17,9 +17,6 @@ if (!defined('EVAS_AUTOROUTER_CLASS_PREFIX'))
 if (!defined('EVAS_AUTOROUTER_CLASS_POSTFIX'))
     define('EVAS_AUTOROUTER_CLASS_POSTFIX', '');
 
-if (!defined('EVAS_AUTOROUTER_CLASS_CUSTOM'))
-    define('EVAS_AUTOROUTER_CLASS_CUSTOM', '');
-
 if (!defined('EVAS_AUTOROUTER_METHOD_PREFIX'))
     define('EVAS_AUTOROUTER_METHOD_PREFIX', '');
 
@@ -36,7 +33,7 @@ class AutoRouterByClassMethod extends AbstractAutoRouter
     public $classPostfix = EVAS_AUTOROUTER_CLASS_POSTFIX;
 
     /** @var string кастомный класс для метода */
-    public $classCustom = EVAS_AUTOROUTER_CLASS_CUSTOM;
+    public $classCustom = null;
 
     /** @var string префикс метода */
     public $methodPrefix = EVAS_AUTOROUTER_METHOD_PREFIX;

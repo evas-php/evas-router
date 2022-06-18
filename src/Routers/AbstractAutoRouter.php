@@ -25,9 +25,9 @@ abstract class AbstractAutoRouter extends MapRouter
      * @param array|null аргументы для обработчика
      * @return RouterResultInterface
      */
-    public function autoRouting(string $uri, array $args = null): ?RouterResultInterface
+    public function autoRouting(string $path, array $args = null): ?RouterResultInterface
     {
-        $handler = $this->generateHandler($uri);
+        $handler = $this->generateHandler($path);
         try {
             return $this->newResult($handler, $args);
         } catch (RouterResultException $e) {
