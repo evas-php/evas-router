@@ -43,12 +43,9 @@ class Controller implements ControllerInterface
      */
     public function resolveViewPath(string $filename): string
     {
-        if (App::canInclude($filename)) {
-            return $filename;
-        }
-        $filename = App::relativePathByApp($filename);
-        $filename = App::resolveByApp($this->viewsDir . $filename);
-        return $filename;
+        $filename2 = App::relativePathByApp($filename);
+        $filename2 = App::resolveByApp($this->viewsDir . $filename2);
+        return App::canInclude($filename2) ? $filename2 : $filename;
     }
 
     /**
